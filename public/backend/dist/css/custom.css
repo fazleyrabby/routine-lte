@@ -1,0 +1,54 @@
+
+.logo{
+    font-size: 20px;
+    color: #fff;
+}
+
+.logo:hover{
+    transform: scale(1.01);
+    color: #fefefe;
+}
+@media (max-width: 768px) {
+    .logo span{
+        font-size: 12px;
+    }
+}
+
+li.has-submenu > a:after {
+    content: "\54";
+    font-family: "dripicons-v2";
+    position: absolute;
+    right: 0;
+    bottom: 50%;
+    transform: translateY(50%);
+    font-size: 15px;
+  }
+
+
+/*.page-content-wrapper {*/
+/*    padding-top: 5rem !important;*/
+/*}*/
+.page-title-box .breadcrumb a{
+    color: #111 !important;
+}
+.breadcrumb > li + li{
+    position: relative;
+}
+.breadcrumb > li + li:before {
+    position: absolute;
+    left: -5px;
+    content: "\56" !important;
+    font-family: "dripicons-v2" !important;
+}
+
+.breadcrumb > li + li a{
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 991px) {
+    table {
+        width: 100%;
+        overflow-x: scroll;
+        display: block;
+    }
+}
