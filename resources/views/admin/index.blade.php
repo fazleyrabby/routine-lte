@@ -7,48 +7,48 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary mini-stat position-relative">
+                <div class="card bg-info mini-stat position-relative">
                     <div class="card-body">
                         <div class="mini-stat-desc">
                             <div class="text-white">
-                                <h6 class="text-uppercase mt-0 text-white-50">Teachers</h6>
-                                <h3 class="mb-3 mt-0">{{ $data['teacher'] }}</h3>
+                                <h6 class="text-uppercase mt-0 text-white-50 font-weight-bolder">Teachers</h6>
+                                <h3 class="mb-3 mt-0 font-weight-bolder">{{ $data['teacher'] }}</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary mini-stat position-relative">
+                <div class="card bg-success mini-stat position-relative">
                     <div class="card-body">
                         <div class="mini-stat-desc">
                             <div class="text-white">
-                                <h6 class="text-uppercase mt-0 text-white-50">Students</h6>
-                                <h3 class="mb-3 mt-0">{{ $data['student'] }}</h3>
+                                <h6 class="text-uppercase mt-0 text-white-50 font-weight-bolder">Students</h6>
+                                <h3 class="mb-3 mt-0 font-weight-bolder">{{ $data['student'] }}</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary mini-stat position-relative">
+                <div class="card bg-warning mini-stat position-relative">
                     <div class="card-body">
                         <div class="mini-stat-desc">
-                            <div class="text-white">
-                                <h6 class="text-uppercase mt-0 text-white-50">Courses</h6>
-                                <h3 class="mb-3 mt-0">{{ $data['course'] }}</h3>
+                            <div class="text-dark">
+                                <h6 class="text-uppercase mt-0 text-dark-50 font-weight-bolder">Courses</h6>
+                                <h3 class="mb-3 mt-0 font-weight-bolder">{{ $data['course'] }}</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-primary mini-stat position-relative">
+                <div class="card bg-danger mini-stat position-relative">
                     <div class="card-body">
                         <div class="mini-stat-desc">
                             <div class="text-white">
-                                <h6 class="text-uppercase mt-0 text-white-50">Batches</h6>
-                                <h3 class="mb-3 mt-0">{{ $data['batch'] }}</h3>
+                                <h6 class="text-uppercase mt-0 text-white-50 font-weight-bolder">Batches</h6>
+                                <h3 class="mb-3 mt-0 font-weight-bolder">{{ $data['batch'] }}</h3>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="card-body">
                             <h4 class="mt-0 header-title mb-4">Teachers</h4>
                             <div class="table-responsive">
-                                <table id="datatable-buttons"
+                                <table 
                                        class="table table-striped table-bordered dt-responsive nowrap"
                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
@@ -104,7 +104,7 @@
                         <div class="card-body">
                             <h4 class="mt-0 header-title mb-4">Rooms</h4>
                             <div class="table-responsive order-table">
-                                <table id="datatable-buttons"
+                                <table 
                                        class="table table-striped table-bordered dt-responsive nowrap"
                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
@@ -144,7 +144,7 @@
                         <div class="card-body">
                             <h4 class="mt-0 header-title mb-4">Courses</h4>
                             <div class="table-responsive">
-                                <table id="datatable-buttons"
+                                <table 
                                        class="table table-striped table-bordered dt-responsive nowrap"
                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                     <thead>
