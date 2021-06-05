@@ -110,21 +110,6 @@
                                 </div>
                             @endif
 
-                            <ul id="teacher_day_count" class="list-group bg-white" style="flex-direction: row;flex-wrap: wrap;">
-                            @foreach($teachers as $teacher)
-                                @foreach($assigned_class_distinct_day_count as $counter)
-                                    @if($counter->teacher_id == $teacher->id && $counter->day_count < 5)
-                                    <li class="list-group-item ">
-                                        <button type="button" class="btn btn-dark waves-effect mo-mb-2" data-container="body" data-toggle="popover"  data-trigger="focus" data-placement="top" data-content="Classes Assigned for {{ $counter->day_count }} {{ $counter->day_count > 1 ? 'days': 'day' }}" data-original-title=" {{ $teacher->user->firstname." ".$teacher->user->lastname }} " title="" aria-describedby="popover108586">
-                                            {{ $teacher->user->firstname." ".$teacher->user->lastname }}
-                                            <span class="badge badge-pill badge-danger noti-icon-badge">{{ $counter->day_count }}</span>
-                                        </button>
-                                    </li>
-                                    @endif
-                                @endforeach
-                            @endforeach
-                            </ul>
-
                             @foreach($slots as $slot)
                                 <h3 class="text-uppercase bg-dark p-2 text-light float-left">
                                     <strong>
@@ -340,15 +325,8 @@
 
 
 @push('script')
-    <script src="{{asset ('assets/js/waves.min.js') }}"></script>
-    <script src="{{asset ('assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-{{--    <script src="{{asset ('assets/plugins/peity/jquery.peity.min.js') }}"></script>--}}
-{{--    <script src="{{asset ('assets/plugins/morris/morris.min.js') }}"></script>--}}
-{{--    <script src="{{asset ('assets/plugins/raphael/raphael-min.js') }}"></script>--}}
-{{--    <script src="{{asset ('assets/pages/dashboard.js') }}"></script>--}}
     <script>
         let class_slots = document.querySelectorAll('.class_slot');
-        // console.log(class_slots[0].dataset.id);
         class_slots.forEach((class_slot)=>{
             class_slot.addEventListener('blur', function(e) {
                 let total_slot = e.target.value;
@@ -435,7 +413,6 @@
                     data: data,
                     dataType: "json",
                     success: function(data) {
-
                         if(data){
                             if(data.msg){
                                 course_alert.innerHTML = `<div class="alert-dismissable alert alert-danger">

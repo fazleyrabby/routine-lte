@@ -51,7 +51,7 @@
 
                <!--  courses -->
                <li class="dropdown-submenu dropdown-hover">
-                <a id="courses" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">{{ __('Shift') }}</a>
+                <a id="courses" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">{{ __('Courses') }}</a>
                 <ul aria-labelledby="courses" class="dropdown-menu border-0 shadow">
                     <li class="nav-item"><a class="nav-link" href="{{ route('courses.index') }}">View All</a>
                     </li>

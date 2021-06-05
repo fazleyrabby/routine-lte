@@ -28,9 +28,11 @@
 @endif
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper ml-0">
+    
 @if(Auth::check())
 @include('layouts.partials.breadcrumbs')
 @endif
+
 @yield('content')
 <!-- /.content -->
 </div>
@@ -62,6 +64,9 @@
 <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+
+@stack('script')
 
 <!-- Page specific script -->
 <script>

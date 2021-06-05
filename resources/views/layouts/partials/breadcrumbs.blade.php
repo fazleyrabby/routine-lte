@@ -2,14 +2,11 @@
 
 
   <!-- Content Header (Page header) -->
-  <div class="content-header mb-2">
+  <div class="content-header">
     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Custom title</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb float-sm-left">
             @php $segments = ''; @endphp
             @foreach(Request::segments() as $segment)
                 @php

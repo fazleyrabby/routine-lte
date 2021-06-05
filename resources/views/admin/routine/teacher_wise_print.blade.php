@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="Robots" content="index,follow"/>
     {{--    <link href="{{asset ('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />--}}
-    <link rel="stylesheet" type="text/css" href="{{asset ('assets/css/report.css') }}" media="all" />
+    <link rel="stylesheet" type="text/css" href="{{asset ('backend/dist/css/report.css') }}" media="all" />
 
     <style>
         @page {
