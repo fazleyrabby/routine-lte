@@ -140,7 +140,6 @@
                                         </span>
                                         @endif
 
-
                                     </div>
                                      Prev Photo : <img width="100" src={{ asset('storage/uploads/' . $teacher->user->photo)  }} alt="">
                                 </div>

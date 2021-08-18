@@ -90,7 +90,6 @@
                             <div>
                                   @if($request_check && ($request_check->request_status == "active" && $request_check->expired_date >= now()))
                                     <h5>Insert your data before
-
                                             <span class="bg bg-danger text-light p-2"> {{ date('d-m-Y h:i a', strtotime($request_check->expired_date)) }} </span> </h5>
                                   @endif
 
@@ -429,8 +428,6 @@
                                 html += '</select><div>';
                                 additional_slot.innerHTML = html;
                             }
-
-
                         }
                     }
                 });

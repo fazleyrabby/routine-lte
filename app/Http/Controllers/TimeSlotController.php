@@ -45,19 +45,17 @@ class TimeSlotController extends MasterController
             'to' => 'required',
             'shift' => 'required'
         ],
-            [
-                'from.required' => 'Enter from time',
-                'shift.required' => 'Select Shift',
-                'to.required' => 'Enter to time',
-            ]);
+        [
+            'from.required' => 'Enter from time',
+            'shift.required' => 'Select Shift',
+            'to.required' => 'Enter to time',
+        ]);
         $time_slot = new TimeSlot();
         $time_slot->from = $request->from;
         $time_slot->to = $request->to;
         $time_slot->shift_id = $request->shift;
 
         $time_slot->save();
-
-
         Session::flash('message', 'Time Slot added successfully');
         return redirect()->route('time_slots.index');
     }

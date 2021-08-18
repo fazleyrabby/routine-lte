@@ -24,8 +24,6 @@ class FullRoutineController extends MasterController
 {
     public function index($yearly_session)
     {
-
-
         $slots = Day::with(['routine','routine.course','routine.teacher','routine.teacher.user','routine.room','routine.day','routine.time_slot'])->get();
 
         $day_wise_slots = DayWiseSlot::with('day','time_slot')->get();
@@ -43,10 +41,7 @@ class FullRoutineController extends MasterController
 
         $last_edited_by = FullRoutine::select('users.firstname','users.lastname','routine.updated_at')->leftJoin('users','users.id','=','routine.edited_by')->orderBy('routine.updated_at','DESC')->whereNotNull('routine.edited_by')->get()->first();
 
-
-
         $teachers = Teacher::with(['user','rank'])->where('is_active','yes')->get();
-
 
         $assigned_class_distinct_day_count = FullRoutine::selectRaw('teacher_id, COUNT(DISTINCT day_id) as day_count')
             ->groupBy('teacher_id')
@@ -327,7 +322,7 @@ class FullRoutineController extends MasterController
         $exist_class_slots = DB::table('routine')->select('*')
             ->where('routine.day_id' , $request->day_id)
             ->where('routine.time_slot_id', $request->time_slot_id)
-            ->leftjoin('courses','courses.id', 'routine.course_id')
+            ->leftJoin('courses','courses.id', 'routine.course_id')
             ->where('course_type', '0')
             ->count();
         $data = array();
@@ -496,8 +491,6 @@ class FullRoutineController extends MasterController
                 ['routine.teacher_id', $request->teacher_id],
                 ['routine.yearly_session_id', $request->yearly_session_id]
             ])->count();
-
-
         }
 
         // Checking if assigned day is teacher's off day
@@ -534,7 +527,7 @@ class FullRoutineController extends MasterController
             //If data exists on same teacher and same time slot
             if ($exist_teacher_time_slot == 0){
 
-//                If total class exceeds from given class slot
+            //If total class exceeds from given class slot
 
                     if ($request->routine_id == ''){
                         if ($day_wise_slot == $exist_class_slots && $course->course_type == 0) {

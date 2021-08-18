@@ -70,18 +70,18 @@
 
 <!-- Page specific script -->
 <script>
-    $(function () {
-      $("#datatable-buttons").DataTable({
-        "responsive": true, 
-        "lengthChange": false, 
-        "autoWidth": false,
-        "paging": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-    });
+    // $(function () {
+    //   $("#datatable-buttons").DataTable({
+    //     "responsive": true, 
+    //     "lengthChange": false, 
+    //     "autoWidth": false,
+    //     "paging": true,
+    //     "searching": true,
+    //     "ordering": true,
+    //     "info": true,
+    //     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    //   }).buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+    // });
   </script>
 </body>
 </html>
