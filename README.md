@@ -1,5 +1,5 @@
 ### Installation 
-After cloning this repo create a .env file same as copy everything from .env.example<br>
+After cloning this repo create an .env file and copy everything from .env.example<br>
 <pre> cp .env.example .env </pre>
 It will create a copy of .env.example as .env <br><br>
 Now generate an APP_KEY <br>
