@@ -1,8 +1,8 @@
 ### Installation 
 After cloning this repo create a .env file same as copy everything from .env.example<br>
 <pre> cp .env.example .env </pre>
-It will create a copy of .env.example as .env <br>
-Generate an APP_KEY <br>
+It will create a copy of .env.example as .env <br><br>
+Now generate an APP_KEY <br>
 <pre> php artisan key:generate </pre>
 Now open the .env file you just created and give a database name on DB_DATABASE as you want<br>
 Suppose the database name is routine<br>
@@ -13,12 +13,12 @@ DB_PORT=3306
 DB_DATABASE=routine
 DB_USERNAME=root
 DB_PASSWORD=</pre>
-After that create a database named as "routine" which I used as an example above <br>
+After that create a database named as "routine" which I used as an example above <br><br>
 Now install all composer packages <br>
 <pre> composer install </pre>
 Then run migration as well as db:seed command to get some pre-existing data to get started with the project<br>
 <pre> php artisan migrate:fresh --seed </pre>
-Now you can serve the project or run with xampp anyway you prefer<br>
+Now you can serve the project or run with xampp anyway you prefer<br><br>
 To serve with artisan <br>
 <pre> php artisan serve </pre>
 Now you can run the project with localserver accessing this url below:
