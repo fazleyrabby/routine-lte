@@ -43,7 +43,7 @@
                                 <input id="email" type="text" class="form-control
                                 @if ($errors->has('username') || $errors->has('email'))
                                     is-invalid
-                                @endif " name="login" value="{{ old('username') ?: old('email') }}" required autocomplete="login" autofocus>
+                                @endif " name="login" value="{{ old('username') ? old('email') : 'superadmin' }}" required autocomplete="login" autofocus>
 
                                 @if ($errors->has('username') || $errors->has('email'))
                                     <span class="invalid-feedback">
@@ -57,7 +57,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="123456">
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -90,20 +90,50 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
-
-
                             </div>
-
-{{--                            <div class="col-md-8 offset-md-4 pt-3">--}}
-{{--                                Don't have account??--}}
-{{--                                <a class="" href="{{ route('register') }}">--}}
-{{--                                    Register here--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-
-
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Credentials
+                </div>
+
+                <div class="card-body">
+                   <div class="row">
+                       <div class="col-md-6">
+                           <p>Admin</p>
+                           <table class="table table-bordered">
+                            <tbody>
+                              <tr>
+                                <td>Username</td>
+                                <td>superadmin</td>
+                              </tr>
+                              <tr>
+                                <td>Password</td>
+                                <td>123456</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                       </div>
+                       <div class="col-md-6">
+                            <p>Teacher/User</p>
+                            <table class="table table-bordered">
+                                <tbody>
+                                  <tr>
+                                    <td>Username</td>
+                                    <td>maqsudur_rahman</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Password</td>
+                                    <td>123456</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                       </div>
+                   </div>
                 </div>
             </div>
         </div>
