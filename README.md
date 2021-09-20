@@ -25,11 +25,29 @@ Now you can run the project with localserver accessing this url below:
 <pre> http://127.0.0.1:8000 </pre> 
 
 **Admin** Credentaials:
-<pre>username: superadmin 
-password: 123456 
-</pre> 
+<table>
+<tbody>
+<tr>
+<td>Username</td>
+<td>superadmin</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>123456</td>
+</tr>
+</tbody>
+</table>
 
 **Teacher/User** Credentaials:
-<pre>username: maqsudur_rahman 
-password: 123456 
-</pre> 
+<table>
+<tbody>
+<tr>
+<td>Username</td>
+<td>maqsudur_rahman</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>123456</td>
+</tr>
+</tbody>
+</table>
