@@ -23,3 +23,13 @@ To serve with artisan <br>
 <pre> php artisan serve </pre>
 Now you can run the project with localserver accessing this url below:
 <pre> http://127.0.0.1:8000 </pre> 
+
+**Admin** Credentaials:
+<pre>username: superadmin 
+password: 123456 
+</pre> 
+
+**Teacher/User** Credentaials:
+<pre>username: maqsudur_rahman 
+password: 123456 
+</pre> 
