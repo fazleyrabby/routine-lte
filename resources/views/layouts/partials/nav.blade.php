@@ -14,10 +14,18 @@
         <ul class="navbar-nav">
 
         <li class="nav-item">
-            <a href="{{ url("/admin") }}" class="nav-link">{{ __('Dashboard') }}</a>
+            <a href="{{ url("/admin") }}" class="nav-link"> <i class="fas fa-home"></i> </a>
         </li>
-        <li class="nav-item">
-            <a href="{{ route('users.show', Auth::user()->id) }}" class="nav-link">{{ __('Profile') }}</a>
+        <li class="nav-item dropdown">
+            <a id="profile" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Profile') }}</a>
+            <ul aria-labelledby="application" class="dropdown-menu border-0 shadow">
+              <li class="dropdown-submenu dropdown-hover">
+                <a  href="{{ route('users.show', Auth::user()->id) }}" class="dropdown-item">{{ __('Profile') }}</a>
+              </li>
+              <li class="dropdown-submenu dropdown-hover">
+                <a href="{{ route('logout') }}" class="nav-link">Logout</a>
+            </li>
+            </ul>
         </li>
         @if ((Auth::user()->role) == 'superadmin' || (Auth::user()->role) == 'admin')
 
@@ -133,6 +141,17 @@
               </li>
               <!-- End  ranks -->
 
+              <li class="dropdown-submenu dropdown-hover">
+                <a id="time_slots" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">{{ __('Time Slots') }}</a>
+                <ul aria-labelledby="time_slots" class="dropdown-menu border-0 shadow">
+                    <li class="nav-item"><a class="nav-link" href="{{ route('time_slots.index') }}">View All</a>
+                    </li>
+                </ul>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('day_wise_slots') }}">Day Wise Slot</a>
+              </li>
 
               <!--  roles -->
               <li class="nav-item"><a class="nav-link" href="{{ route('roles') }}">Roles</a>
@@ -163,20 +182,14 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a id="students" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Studens') }}</a>
+            <a id="students" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Students') }}</a>
             <ul aria-labelledby="students" class="dropdown-menu border-0 shadow">
                 <li class="nav-item"><a class="nav-link" href="{{ route('students.index') }}">View All</a>
                 </li>
             </ul>
           </li>
 
-          <li class="nav-item dropdown">
-            <a id="time_slots" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Time Slots') }}</a>
-            <ul aria-labelledby="time_slots" class="dropdown-menu border-0 shadow">
-                <li class="nav-item"><a class="nav-link" href="{{ route('time_slots.index') }}">View All</a>
-                </li>
-            </ul>
-          </li>
+          
 
           <li class="nav-item dropdown">
             <a id="course_offers" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Course Offers') }}</a>
@@ -186,28 +199,11 @@
             </ul>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('day_wise_slots') }}">Day Wise Slot</a>
-        </li>
+          
           @endif
 
 
           @if (Auth::check())
-          <li class="nav-item dropdown">
-            <a id="full_routine" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Generate Routine') }}</a>
-              <ul aria-labelledby="full_routine" class="dropdown-menu border-0 shadow">
-                  @if(!empty($y_session))
-                      @foreach($y_session as $session)
-                          <li class="nav-item">
-                              <a class="nav-link" href="{{ route('full_routine',$session->id) }}">
-                                  {{ $session->session_name. '-' . $session->year}}
-                              </a>
-                          </li>
-                      @endforeach
-                  @endif
-              </ul>
-          </li>
-
           <li class="nav-item dropdown">
             <a id="view_routine" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('View routine') }}</a>
             <ul aria-labelledby="view_routine" class="dropdown-menu border-0 shadow">
@@ -239,6 +235,23 @@
 
             </ul>
         </li>
+
+          <li class="nav-item dropdown bg-danger">
+            <a id="full_routine" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Generate Routine') }}</a>
+              <ul aria-labelledby="full_routine" class="dropdown-menu border-0 shadow">
+                  @if(!empty($y_session))
+                      @foreach($y_session as $session)
+                          <li class="nav-item">
+                              <a class="nav-link" href="{{ route('full_routine',$session->id) }}">
+                                  {{ $session->session_name. '-' . $session->year}}
+                              </a>
+                          </li>
+                      @endforeach
+                  @endif
+              </ul>
+          </li>
+
+          
         @endif
         </ul>
 
@@ -282,9 +295,7 @@
         @endif
           </div>
         </li>
-        <li class="ml-2 nav-item">
-            <a href="{{ route('logout') }}" class="nav-link btn btn-danger text-light">Logout</a>
-        </li>
+       
       </ul>
     </div>
   </nav>
