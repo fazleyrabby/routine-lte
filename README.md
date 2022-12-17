@@ -54,9 +54,6 @@ To serve with artisan <br>
 Now you can run the project with localserver accessing this url below:
 <pre> http://127.0.0.1:8000 </pre> 
 
-if you want to see the live demo visit here:
-<a href="https://routine-pciu-cse.up.railway.app/" target="_blank">https://routine-pciu-cse.up.railway.app</a>
-
 **Admin** Credentaials:
 <table>
 <tbody>
