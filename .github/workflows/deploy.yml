@@ -1,32 +1,30 @@
-name: Deploy
+name: Deploy Laravel Project on push
 on:
   push:
-  pull_request:
+    branches:
+      - main
 jobs:
-  tests:
+  web-deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    name: Build & Deploy Assets
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Deploy to cPanel
-      - name: Ftp-deploy-cpanel
+      - name: Get the latest code
+        uses: actions/checkout@v2.3.2
+      - uses: actions/setup-node@master
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Dependencies
+        run: composer update --ignore-platform-reqs
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Generate storage link
+        run: php artisan storage:link
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
-          chmod 600 ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa.pub
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
-      - name: Deploy
-        run: |
-          ssh syncflux@${{ secrets.SERVER_IP }} 'bash -s' < ${{ github.workspace }}/.github/workflows/deploy.sh
+          server-dir: /
