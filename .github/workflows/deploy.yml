@@ -21,6 +21,8 @@ jobs:
         run: php artisan storage:link
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
+      - name: Run DB migrate and seeder
+        run: php artisan migrate:fresh --seed
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
