@@ -17,8 +17,6 @@ jobs:
         run: composer update --ignore-platform-reqs
       - name: Generate key
         run: php artisan key:generate
-      - name: Run DB migrate and seeder
-        run: php artisan migrate:fresh --seed
       - name: Generate storage link
         run: php artisan storage:link
       - name: Directory Permissions
