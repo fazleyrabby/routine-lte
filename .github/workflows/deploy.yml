@@ -11,8 +11,9 @@ jobs:
       - name: Get the latest code
         uses: actions/checkout@v2.3.2
       - uses: actions/setup-node@master
-      - name: Copy .env
-        run: php -r "if(!file_exists('.env')) copy('.env.example', '.env');"
+      - name: 'Create env file'
+        run: |
+          echo "${{ secrets.ROUTINE_ENV }}" > .env
       - name: Install Dependencies
         run: composer update --ignore-platform-reqs
       - name: Generate key
