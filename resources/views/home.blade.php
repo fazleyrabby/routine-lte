@@ -31,7 +31,7 @@
                 <h4 class="text-center my-3">Select option</h4>
                 <div class="card-body">
                         <div class="form-group row mb-0">
-                            <div class="col-md-6">
+                            <div class="col-md-6 mb-2">
                                 <a class="w-100 btn btn-primary" href="{{ route('routine') }}">
                                     View Routine
                                 </a>
