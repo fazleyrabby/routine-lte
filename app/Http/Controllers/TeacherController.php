@@ -7,11 +7,11 @@ use Cassandra\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Teacher;
-use App\User;
+use App\Models\User;
 use App\Models\TeacherRank;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class TeacherController extends MasterController
 {
@@ -46,68 +46,47 @@ class TeacherController extends MasterController
      */
     public function store(Request $request)
     {
-//        $this->validate($request, ['file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',]);
         $this->validate($request, [
-//            'firstname' => 'required',
-//            'lastname' => 'required',
             'email' => 'required',
-//            'contact' => 'required',
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5000'
-        ],
-            [
-//                'firstname.required' => 'Enter First name',
-//                'lastname.required' => 'Enter Last name',
-                'email.required' => 'Enter email',
-//                'contact.required' => 'Enter contact number',
-            ]);
-
-
+        ], [
+            'email.required' => 'Enter email',
+        ]);
 
         $teacher = new Teacher();
         $user = new User();
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
-
         $user->contact = $request->contact;
         $user->email = $request->email;
         $user->username = $request->username;
         $user->role = $request->role;
         $user->gender = $request->gender;
         $user->date_of_birth = date('Y-m-d', strtotime($request->date_of_birth));
-        $user->password = Hash::make('123456');
+        $user->password = Hash::make(config('app.default_password', '123456'));
 
         $teacher->department_id = $request->department_id;
         $teacher->slug = $request->slug;
         $teacher->rank_id = $request->rank_id;
         $teacher->join_date = date('Y-m-d', strtotime($request->join_date));
 
-
-        if ($request->photo){
-
+        if ($request->photo) {
             $image_url = $request->photo;
-            //Get file with extension
             $fileNameWithExt = $image_url->getClientOriginalName();
-
-            //Get just file name
             $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
-
-            //Get file extension
             $fileExt = $image_url->getClientOriginalExtension();
-
-            //Get file name to store
             $fileNameToStore = $filename.time().'_'. $fileExt;
 
             $user->photo = $fileNameToStore;
             $path = storage_path().'/app/public/uploads/';
 
-            $image_url->move($path,$fileNameToStore);
-            $image = Image::make($path.$fileNameToStore);
-            $image->resize(300,300);
-            $image->save($path.$fileNameToStore);
+            $image_url->move($path, $fileNameToStore);
+            Image::read($path.$fileNameToStore)
+                ->resize(300, 300)
+                ->save($path.$fileNameToStore);
         }
 
         $user->save();
-
         User::find($user->id)->teacher()->save($teacher);
 
         Session::flash('message', 'Teacher added successfully');
@@ -172,7 +151,6 @@ class TeacherController extends MasterController
         $user->role = $request->role;
         $user->gender = $request->gender;
         $user->date_of_birth = date('Y-m-d', strtotime($request->date_of_birth));
-        $user->password = Hash::make('123456');
 
         $teacher->department_id = $request->department_id;
         $teacher->rank_id = $request->rank_id;
@@ -181,28 +159,20 @@ class TeacherController extends MasterController
 
 
         if ($request->photo){
-
             $image_url = $request->photo;
-            //Get file with extension
             $fileNameWithExt = $image_url->getClientOriginalName();
-
-            //Get just file name
             $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
-
-            //Get file extension
             $fileExt = $image_url->getClientOriginalExtension();
-
-            //Get file name to store
             $fileNameToStore = $filename.time().'_'. $fileExt;
 
             $user->photo = $fileNameToStore;
 
             $path = storage_path().'/app/public/uploads/';
 
-            $image_url->move($path,$fileNameToStore);
-            $image = Image::make($path.$fileNameToStore);
-            $image->fit(300,300);
-            $image->save($path.$fileNameToStore);
+            $image_url->move($path, $fileNameToStore);
+            Image::read($path.$fileNameToStore)
+                ->cover(300, 300)
+                ->save($path.$fileNameToStore);
         }
 
         $user->save();

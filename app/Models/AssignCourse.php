@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssignCourse extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     protected $table = 'assign_courses_to_teachers';
 

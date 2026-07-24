@@ -28,7 +28,6 @@ class TimeSlotController extends MasterController
     public function create()
     {
         $shifts = Shift::where('is_active','yes')->pluck('shift_name','id');
-//        dd($shifts);
         return view('admin.time_slot.create',compact('shifts'));
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentsLog extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     protected $table = 'students_log';
 }

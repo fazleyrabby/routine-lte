@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'default_password' => env('DEFAULT_PASSWORD', '123456'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

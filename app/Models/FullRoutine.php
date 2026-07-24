@@ -8,7 +8,7 @@ class FullRoutine extends Model
 {
     protected $table = 'routine';
 
-    protected  $guarded = [];
+    protected $guarded = ['id'];
 
     public function course()
     {

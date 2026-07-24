@@ -8,7 +8,7 @@ class YearlySession extends Model
 {
     protected $table = 'yearly_sessions';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function session()
     {

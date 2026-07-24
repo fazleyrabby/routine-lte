@@ -9,11 +9,11 @@ use App\Models\Teacher;
 use App\Models\TeacherRank;
 use App\Models\TeachersOffday;
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Laravel\Facades\Image;
 
 class UserController extends MasterController
 {
@@ -28,12 +28,6 @@ class UserController extends MasterController
             abort(404);
         }
         return redirect()->route('teachers.index');
-//        if (Auth::user()->role == 'user'){
-//            abort(404);
-//        }
-//        $users = User::with('sender','receiver')->get();
-////        $requests = RoutineCommittee::all();
-//        return view('admin.user.index',compact('users'))->with('sl',1);
     }
 
     /**
@@ -61,27 +55,7 @@ class UserController extends MasterController
             abort(404);
         }
 
-        $this->validate($request, [
-            'room_no' => 'required|unique:rooms',
-            'building' => 'required',
-            'capacity' => 'required',
-        ],
-            [
-                'room_no.required' => 'Enter Room No',
-                'capacity.required' => 'Enter Capacity',
-                'room_no.unique' => 'Room no already exist',
-                'building.required' => 'Enter Building Name'
-            ]);
-
-        $room = new Room();
-        $room->building = $request->building;
-        $room->room_no = $request->room_no;
-        $room->capacity = $request->capacity;
-        $room->room_type = $request->room_type;
-        $room->save();
-
-        Session::flash('message', 'Room created successfully');
-        return redirect()->route('rooms.index');
+        return redirect()->route('teachers.create');
     }
 
     /**
@@ -144,7 +118,6 @@ class UserController extends MasterController
         $ranks = TeacherRank::orderBy('id', 'ASC')->where('is_active','yes')->pluck('rank', 'id');
         $departments = Department::orderBy('id', 'ASC')->where('is_active','yes')->pluck('department_name', 'id');
         return view('admin.user.edit', compact('user','ranks','departments'));
-//        return view('admin.user.edit', compact('user'));
     }
 
     public function profile_edit($id){
@@ -206,12 +179,11 @@ class UserController extends MasterController
 
             $path = storage_path().'/app/public/uploads/';
 
-            $image_url->move($path,$fileNameToStore);
-            $image = Image::make($path.$fileNameToStore);
-            $image->fit(300,300);
-            $image->save($path.$fileNameToStore);
+            $image_url->move($path, $fileNameToStore);
+            Image::read($path.$fileNameToStore)
+                ->cover(300, 300)
+                ->save($path.$fileNameToStore);
         }
-
 
         if (Auth::user()->role == 'superadmin'){
             $teacher->department_id = $request->department_id;
@@ -235,13 +207,6 @@ class UserController extends MasterController
         $existing_password_hash = User::where('id', $request->user_id)->pluck('password')->first();
         $new_password = $request->password;
         $new_password_repeat = $request->re_password;
-
-//        echo Auth::user()->password;
-//        echo "<br>";
-//        echo Auth::user()->id;
-//        echo "<br>";
-//        echo $old_password_hash;
-//        exit();
 
         if (!Hash::check($request->old_password, $existing_password_hash)) {
             Session::flash('message', 'Old password did not match!');
@@ -268,8 +233,7 @@ class UserController extends MasterController
      */
     public function destroy(User $user)
     {
-//        $user->delete();
-        $user->is_active = $request->is_active;
+        $user->delete();
 
         Session::flash('delete-message', 'User deleted successfully');
         return redirect()->route('users.index');

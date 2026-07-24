@@ -8,7 +8,7 @@ class SectionStudent extends Model
 {
     protected $table = 'section_students';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function student()
     {

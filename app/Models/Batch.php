@@ -7,7 +7,7 @@ class Batch extends Model
 {
     protected $table = 'batch';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function department()
     {

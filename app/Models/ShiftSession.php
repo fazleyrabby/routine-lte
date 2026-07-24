@@ -8,7 +8,7 @@ class ShiftSession extends Model
 {
     protected $table = 'shift_sessions';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function shift()
     {

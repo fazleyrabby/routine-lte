@@ -18,24 +18,6 @@ class YearlySessionController extends MasterController
      */
     public function index()
     {
-//        $shift_sessions = ShiftSession::with(['session','shift'])
-//            ->select(DB::raw('shift_id','GROUP_CONCAT(sessions.session_name)'))
-//            ->groupBy('shift_id')
-//            ->get();
-
-
-//        $shift_sessions = DB::table('shift_sessions')
-//                          ->leftJoin('shifts', 'shifts.id', '=', 'shift_sessions.shift_id')
-//                          ->leftJoin('sessions', 'sessions.id', '=', 'shift_sessions.session_id')
-//                          ->select('shift_name',DB::raw('group_concat(sessions.session_name) as session_names'))
-//                          ->groupBy('shift_id')->get();
-
-//         $sessions = SS::all();
-//        $shift_sessions = ShiftSession::groupBy('shift_id')->with(['session','shift'])->select('shift_id',DB::raw(group_concat(session_name))->get();
-
-//        dd($shift_sessions);
-
-//        $yearly_sessions = YearlySession::groupBy('year')->select('year','is_active', DB::raw('count(*) as total'))->get();
         $yearly_sessions = YearlySession::with('session')->get();
 
         return view('admin.yearly_session.index', compact('yearly_sessions'));
@@ -100,31 +82,6 @@ class YearlySessionController extends MasterController
 
 
 
-//        echo (json_encode($request->year));
-
-
-//        $this->validate($request, [
-//            'shift_id' => 'required',
-//            'session_id' => 'required'
-//        ],
-//            [
-//                'shift_id.required' => 'Select Shift',
-//                'session_id.required' => 'Select Session',
-//            ]);
-//
-//        $shift_session = new ShiftSession();
-//        $shift_session->shift_id = $request->shift_id;
-//        $shift_session->session_id = $request->session_id;
-//
-//        if ($existShift){
-//            Session::flash('error', 'Shift wise session already assigned');
-//            return redirect()->route('shift_sessions.create');
-//        }
-//        else{
-//            $shift_session->save();
-//            Session::flash('message', 'Shift wise session assigned successfully');
-//            return redirect()->route('shift_sessions.index');
-//        }
     }
 
     /**
@@ -182,8 +139,6 @@ class YearlySessionController extends MasterController
 
     public function destroy($year)
     {
-//        $shift_session = ShiftSession::find($shiftSession->id);
-//        $shift_session->delete();
         YearlySession::where('year',$year)->delete();
         Session::flash('delete-message', 'Yearly Session deleted successfully');
         return redirect()->route('yearly_sessions.index');

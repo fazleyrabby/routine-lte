@@ -20,19 +20,6 @@ class AssignCourseController extends MasterController
      */
     public function index()
     {
-//        $assign_courses = AssignCourse::with(['teacher','session','course','teacher.user','teacher.rank','session.session','batch','batch.shift','batch.department'])->get();
-
-//        $assign_courses = DB::table('assign_courses_to_teachers')
-//                ->select('assign_courses_to_teachers.id as assign_courses_to_teachers_id','users.firstname','users.lastname','years','', DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit - ',courses.credit) as course "))
-//                ->leftJoin('teachers', 'teachers.id','assign_courses_to_teachers.teacher_id')
-//                ->leftJoin('users', 'teachers.user_id','users.id')
-//                ->leftJoin('yearly_sessions', 'assign_courses_to_teachers.session_id','yearly_sessions.id')
-//                ->leftJoin('sessions', 'yearly_sessions.session_id','sessions.id')
-//                ->leftJoin('batch', 'batch.id','assign_courses_to_teachers.batch_id')
-//                ->leftJoin('courses', 'courses.id','assign_courses_to_teachers.course_id')
-//                ->groupBy('teacher_id')
-//                ->get();
-
         $assign_courses = AssignCourse::select("*","assign_courses_to_teachers.id as assign_courses_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
             ->leftJoin('yearly_sessions','yearly_sessions.id','assign_courses_to_teachers.session_id')
             ->leftJoin('teachers', 'teachers.id','assign_courses_to_teachers.teacher_id')
@@ -43,9 +30,6 @@ class AssignCourseController extends MasterController
             ->get();
 
 
-//        dd($courses);
-//        $course = AssignCourse::all();
-//        dd($assign_courses);
         return view('admin.assign_course.index',compact('assign_courses'))->with('i',1);
     }
 

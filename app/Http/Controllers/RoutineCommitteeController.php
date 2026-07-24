@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Teacher;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RoutineInviteRequest;
@@ -41,7 +41,6 @@ class RoutineCommitteeController extends MasterController
     public function store(Request $request)
     {
         $expired_on = date('Y-m-d H:i:s', strtotime($request->expired_date));
-//        dd($expired_on);
         $existData = RoutineCommittee::where([
             ['receiver_id',$request->receiver_id],
             ['request_status','active'],
@@ -50,11 +49,9 @@ class RoutineCommitteeController extends MasterController
 
         if($existData == 0){
             $user = User::where('id', $request->receiver_id)->select('firstname','lastname','email')->first();
-//            $expire_after = $request->expire_after;
             $routine_committee = new RoutineCommittee();
             $routine_committee->sender_id = $request->sender_id;
             $routine_committee->receiver_id = $request->receiver_id;
-//            $routine_committee->expire_after = $request->expire_after;
             $routine_committee->expired_date = $expired_on;
             RoutineCommittee::where('receiver_id',$request->receiver_id)->delete();
             $routine_committee->save();

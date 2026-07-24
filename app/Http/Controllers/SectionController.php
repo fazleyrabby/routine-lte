@@ -15,8 +15,6 @@ class SectionController extends MasterController
      */
     public function index()
     {
-//        $sections = Section::orderBy('id', 'DESC')->get();
-
         $sections = Section::select(['sections.*', 'sub.section_name as sub'])
             ->leftJoin('sections as sub', 'sub.id', '=', 'sections.parent')
             ->get();

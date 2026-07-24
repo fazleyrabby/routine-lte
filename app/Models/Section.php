@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     protected $table = 'sections';
 

@@ -8,7 +8,7 @@ class TeachersOffday extends Model
 {
     protected $table = 'teachers_offday';
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
 
     public function teacher()

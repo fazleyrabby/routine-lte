@@ -93,9 +93,6 @@ class CourseController extends MasterController
      */
     public function update(Request $request, Course $course)
     {
-
-//        dd($request->all());
-
         $this->validate($request, [
             'course_name' => 'required|unique:courses,course_name,' . $course->id,
             'course_code' => 'required|unique:courses,course_code,' . $course->id,
