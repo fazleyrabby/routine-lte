@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 
 class CourseController extends MasterController
 {
@@ -40,21 +42,8 @@ class CourseController extends MasterController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCourseRequest $request)
     {
-        $this->validate($request, [
-            'course_name' => 'required|unique:courses',
-            'course_code' => 'required|unique:courses',
-            'credit' => 'required'
-        ],
-            [
-                'course_name.required' => 'Enter course name',
-                'course_name.unique' => 'Course already exist',
-                'course_code.required' => 'Enter course code',
-                'course_code.unique' => 'Course code already exist',
-                'credit.required' => 'Enter course credit',
-            ]);
-
         $course = new Course();
         $course->course_name = $request->course_name;
         $course->course_code = $request->course_code;
@@ -96,21 +85,8 @@ class CourseController extends MasterController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Course $course)
+    public function update(UpdateCourseRequest $request, Course $course)
     {
-        $this->validate($request, [
-            'course_name' => 'required|unique:courses,course_name,' . $course->id,
-            'course_code' => 'required|unique:courses,course_code,' . $course->id,
-            'credit' => 'required'
-        ],
-            [
-                'course_name.required' => 'Enter course name',
-                'course_name.unique' => 'Course already exist',
-                'course_code.required' => 'Enter course code',
-                'course_code.unique' => 'Course code already exist',
-                'credit.required' => 'Enter course credit',
-            ]);
-
         $course->course_name = $request->course_name;
         $course->course_code = $request->course_code;
         $course->credit = $request->credit;

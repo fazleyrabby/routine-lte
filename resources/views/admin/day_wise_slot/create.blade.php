@@ -5,9 +5,9 @@
 @section('stylesheets')
     <link href="{{ asset('assets/plugins/bootstrap-md-datetimepicker/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet">
     <!-- DataTables -->
-{{--    <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"--}}
+{{--    <link href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"--}}
 {{--          type="text/css"/>--}}
-{{--    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css"/>--}}
+{{--    <link href="{{ asset('backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
 @section('content')

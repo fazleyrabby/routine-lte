@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\StoreRoomRequest;
+use App\Http\Requests\UpdateRoomRequest;
 
 class RoomController extends MasterController
 {
@@ -40,20 +42,8 @@ class RoomController extends MasterController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request)
     {
-        $this->validate($request, [
-            'room_no' => 'required|unique:rooms',
-            'building' => 'required',
-            'capacity' => 'required',
-        ],
-            [
-                'room_no.required' => 'Enter Room No',
-                'capacity.required' => 'Enter Capacity',
-                'room_no.unique' => 'Room no already exist',
-                'building.required' => 'Enter Building Name'
-            ]);
-
         $room = new Room();
         $room->building = $request->building;
         $room->room_no = $request->room_no;
@@ -93,20 +83,8 @@ class RoomController extends MasterController
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(UpdateRoomRequest $request, Room $room)
     {
-        $this->validate($request, [
-            'room_no' => 'required|unique:rooms,room_no,' . $room->id,
-            'capacity' => 'required',
-            'building' => 'required',
-        ],
-            [
-                'room_no.required' => 'Enter Room No',
-                'room_no.unique' => 'Room no already exist',
-                'capacity.required' => 'Enter Capacity',
-                'building.required' => 'Enter Building Name'
-            ]);
-
         $room->building = $request->building;
         $room->room_no = $request->room_no;
         $room->room_type = $request->room_type;

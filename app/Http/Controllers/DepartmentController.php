@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\StoreDepartmentRequest;
+use App\Http\Requests\UpdateDepartmentRequest;
 
 class DepartmentController extends MasterController
 {
@@ -40,16 +42,8 @@ class DepartmentController extends MasterController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDepartmentRequest $request)
     {
-        $this->validate($request, [
-            'department_name' => 'required|unique:departments',
-        ],
-            [
-                'department_name.required' => 'Enter Department Name',
-                'department_name.unique' => 'Department already exists',
-            ]);
-
         $department = new Department();
         $department->department_name = strtoupper($request->department_name);
         $department->save();
@@ -87,16 +81,8 @@ class DepartmentController extends MasterController
      * @param  \App\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Department $department)
+    public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        $this->validate($request, [
-            'department_name' => 'required|unique:departments,department_name,' . $department->id,
-        ],
-            [
-                'department_name.required' => 'Enter Department Name',
-                'department_name.unique' => 'Department already exist',
-            ]);
-
         $department->department_name = strtoupper($request->department_name);
         $department->is_active = $request->is_active;
         $department->save();

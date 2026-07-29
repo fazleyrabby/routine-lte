@@ -12,6 +12,8 @@ use App\Models\TeacherRank;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Http\Requests\StoreTeacherRequest;
+use App\Http\Requests\UpdateTeacherRequest;
 
 class TeacherController extends MasterController
 {
@@ -48,15 +50,8 @@ class TeacherController extends MasterController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTeacherRequest $request)
     {
-        $this->validate($request, [
-            'email' => 'required',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5000'
-        ], [
-            'email.required' => 'Enter email',
-        ]);
-
         $teacher = new Teacher();
         $user = new User();
         $user->firstname = $request->firstname;
@@ -128,24 +123,8 @@ class TeacherController extends MasterController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        $this->validate($request, [
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|unique:users,email,' . $teacher->user_id,
-            'contact' => 'required|unique:users,contact,' . $teacher->user_id,
-            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg'
-        ],
-            [
-                'firstname.required' => 'Enter First name',
-                'lastname.required' => 'Enter Last name',
-                'email.required' => 'Enter email',
-                'email.unique' => 'Email already exists',
-                'contact.unique' => 'Contact number already exists',
-                'contact.required' => 'Enter Contact number',
-            ]);
-
         $user = User::find($teacher->user_id);
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;

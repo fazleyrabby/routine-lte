@@ -104,81 +104,18 @@
                             <span class="nav-link-title">{{ __('Application Settings') }}</span>
                         </a>
                         <div class="dropdown-menu">
-                            <div class="dropdown-menu-columns">
-                                <div class="dropdown-menu-column">
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-department" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Department') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('departments.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('departments.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-shift" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Shift') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('shifts.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('shifts.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-courses" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Courses') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('courses.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('courses.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-rooms" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Rooms') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('rooms.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('rooms.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-batch" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Batch') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('batches.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('batches.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-session" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Session') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('sessions.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('sessions.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-yearly-session" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Yearly Session') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('yearly_sessions.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('yearly_sessions.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-sections" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Sections') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('sections.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('sections.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-ranks" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Ranks') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('ranks.index') }}">View All</a>
-                                            <a class="dropdown-item" href="{{ route('ranks.create') }}">Add New</a>
-                                        </div>
-                                    </div>
-                                    <div class="dropend">
-                                        <a class="dropdown-item dropdown-toggle" href="#navbar-time-slots" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Time Slots') }}</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('time_slots.index') }}">View All</a>
-                                        </div>
-                                    </div>
-                                    <a class="dropdown-item" href="{{ route('day_wise_slots') }}">Day Wise Slot</a>
-                                    <a class="dropdown-item" href="{{ route('roles') }}">Roles</a>
-                                </div>
-                            </div>
+                            <a class="dropdown-item" href="{{ route('departments.index') }}">{{ __('Department') }}</a>
+                            <a class="dropdown-item" href="{{ route('shifts.index') }}">{{ __('Shift') }}</a>
+                            <a class="dropdown-item" href="{{ route('courses.index') }}">{{ __('Courses') }}</a>
+                            <a class="dropdown-item" href="{{ route('rooms.index') }}">{{ __('Rooms') }}</a>
+                            <a class="dropdown-item" href="{{ route('batches.index') }}">{{ __('Batch') }}</a>
+                            <a class="dropdown-item" href="{{ route('sessions.index') }}">{{ __('Session') }}</a>
+                            <a class="dropdown-item" href="{{ route('yearly_sessions.index') }}">{{ __('Yearly Session') }}</a>
+                            <a class="dropdown-item" href="{{ route('sections.index') }}">{{ __('Sections') }}</a>
+                            <a class="dropdown-item" href="{{ route('ranks.index') }}">{{ __('Ranks') }}</a>
+                            <a class="dropdown-item" href="{{ route('time_slots.index') }}">{{ __('Time Slots') }}</a>
+                            <a class="dropdown-item" href="{{ route('day_wise_slots') }}">Day Wise Slot</a>
+                            <a class="dropdown-item" href="{{ route('roles') }}">Roles</a>
                         </div>
                     </li>
 
@@ -190,40 +127,27 @@
                             <span class="nav-link-title">{{ __('Teachers') }}</span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ route('teachers.index') }}">View All</a>
-                            <a class="dropdown-item" href="{{ route('teachers.create') }}">Add New</a>
-                            <div class="dropend">
-                                <a class="dropdown-item dropdown-toggle" href="#navbar-workload" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">{{ __('Workload') }}</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route('assign_courses.index') }}">View All</a>
-                                    <a class="dropdown-item" href="{{ route('assign_courses.create') }}">Add New</a>
-                                </div>
-                            </div>
+                            <a class="dropdown-item" href="{{ route('teachers.index') }}">{{ __('Teachers') }}</a>
+                            <a class="dropdown-item" href="{{ route('assign_courses.index') }}">{{ __('Workload') }}</a>
                         </div>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#navbar-students" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('students.index') }}">
                             <span class="nav-link-icon">
                                 <i class="fas fa-user-graduate"></i>
                             </span>
                             <span class="nav-link-title">{{ __('Students') }}</span>
                         </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ route('students.index') }}">View All</a>
-                        </div>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#navbar-course-offers" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('course_offers.index') }}">
                             <span class="nav-link-icon">
                                 <i class="fas fa-book"></i>
                             </span>
                             <span class="nav-link-title">{{ __('Course Offers') }}</span>
                         </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ route('course_offers.index') }}">View All</a>
-                        </div>
                     </li>
                     @endif
 

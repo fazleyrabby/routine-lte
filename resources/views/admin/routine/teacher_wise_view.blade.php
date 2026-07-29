@@ -4,9 +4,9 @@
 
 @section('stylesheets')
     <!-- DataTables -->
-    <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
+    <link href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
           type="text/css"/>
-    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -101,7 +101,10 @@
                                         <td>
                                             {{ $slot->day_title }}
                                         </td>
-                                        @foreach($day_wise_slots as $timeslot)
+                                        @php
+                                            $skipped_slots = [];
+                                        @endphp
+                                        @foreach($day_wise_slots as $index => $timeslot)
 
                                             @php $flag = 0 @endphp
 
@@ -111,56 +114,73 @@
                                             @endif
 
                                             @if($flag == 1)
+                                                @if(in_array($timeslot->id, $skipped_slots))
+                                                    @continue
+                                                @endif
+
                                                 @php
-                                                    $ColumnPrinted = false; $course_code = $course_name = $course_type = $room = $faculty_details = ''; $slot_count = count($slot->routine) @endphp
-                                                @foreach($slot->routine as $key => $routine)
+                                                    $course_code = $course_name = $course_type = $room = $faculty_details = '';
+                                                    $current_routine = null;
+                                                    foreach($slot->routine as $routine) {
+                                                        if($timeslot->day->id == $routine->day_id && $timeslot->time_slot->id == $routine->time_slot_id &&  $routine->yearly_session_id == $y_session_id) {
+                                                            $current_routine = $routine;
+                                                            break;
+                                                        }
+                                                    }
 
-                                                    @php($section_name = "")
+                                                    $colspan = 1;
+                                                    if ($current_routine) {
+                                                        $next_index = $index + 1;
+                                                        while(isset($day_wise_slots[$next_index])) {
+                                                            $next_timeslot = $day_wise_slots[$next_index];
+                                                            if ($next_timeslot->day_id != $slot->id) {
+                                                                break;
+                                                            }
+                                                            $next_routine = null;
+                                                            foreach($slot->routine as $r) {
+                                                                if($next_timeslot->day->id == $r->day_id && $next_timeslot->time_slot->id == $r->time_slot_id &&  $r->yearly_session_id == $y_session_id) {
+                                                                    $next_routine = $r;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if ($next_routine && 
+                                                                $next_routine->course_id == $current_routine->course_id &&
+                                                                $next_routine->teacher_id == $current_routine->teacher_id &&
+                                                                $next_routine->room_id == $current_routine->room_id &&
+                                                                $next_routine->batch_id == $current_routine->batch_id &&
+                                                                $next_routine->section_id == $current_routine->section_id &&
+                                                                $next_routine->yearly_session_id == $current_routine->yearly_session_id) {
+                                                                $colspan++;
+                                                                $skipped_slots[] = $next_timeslot->id;
+                                                                $next_index++;
+                                                            } else {
+                                                                break;
+                                                            }
+                                                        }
 
-                                                    @if($routine->section_id && $routine->batch->student)
-                                                        @foreach($routine->batch->student->section_student as $section_student)
-                                                            @if($section_student->section->id == $routine->section_id)
-                                                                @php($section_name = "-".$section_student->section->section_name)
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
+                                                        $section_name = "";
+                                                        if($current_routine->section_id && $current_routine->batch->student) {
+                                                            foreach($current_routine->batch->student->section_student as $section_student) {
+                                                                if($section_student->section->id == $current_routine->section_id) {
+                                                                    $section_name = "-".$section_student->section->section_name;
+                                                                }
+                                                            }
+                                                        }
 
-                                                    @if($timeslot->day->id == $routine->day_id && $timeslot->time_slot->id == $routine->time_slot_id &&  $routine->yearly_session_id == $y_session_id)
-                                                        @php($course_code = $routine->course->course_code)
-                                                        @php($course_type = $routine->course->course_type == '0' ? ' (T)': ' (L)')
-                                                        @php($type = $routine->course->course_type)
-                                                        @php($course_name = $routine->course->course_name)
-                                                        @php($room = $routine->room->building.'-'.$routine->room->room_no)
-                                                        @php($faculty_details = $routine->batch->department->department_name."-".$routine->batch->batch_no."-".$routine->batch->shift->slug.$section_name)
-
-                                                    @endif
-
-{{--                                                    @if($key != $slot_count - 1)--}}
-{{--                                                        @if($course_code == $slot->routine[$key+1]->course->course_code && $type == 1)--}}
-{{--                                                            @php($ColumnPrinted = true)--}}
-{{--                                                            @php($colspan = 2)--}}
-{{--                                                        @else--}}
-{{--                                                            @php($colspan = 1)--}}
-{{--                                                            @php($ColumnPrinted = false)--}}
-{{--                                                        @endif--}}
-{{--                                                    @endif--}}
-                                                @endforeach
-
-{{--                                                    @if($ColumnPrinted == false)--}}
-{{--                                                    <td class="text-center font-weight-bold" colspan="{{ $colspan }}">--}}
-{{--                                                        {{ $course_code.$course_type }} <br>--}}
-{{--                                                        {{ $course_name }} <br>--}}
-{{--                                                        {{ $room }} <br>--}}
-{{--                                                        {{ $faculty_details }} <br>--}}
-{{--                                                    </td>--}}
-{{--                                                    @php($colspan = 1)--}}
-{{--                                                    @php($ColumnPrinted = true)--}}
-{{--                                                    @endif--}}
+                                                        $course_code = $current_routine->course->course_code;
+                                                        $course_type = $current_routine->course->course_type == '0' ? ' (T)' : ' (L)';
+                                                        $course_name = $current_routine->course->course_name;
+                                                        $room = $current_routine->room->building.'-'.$current_routine->room->room_no;
+                                                        $faculty_details = $current_routine->batch->department->department_name."-".$current_routine->batch->batch_no."-".$current_routine->batch->shift->slug.$section_name;
+                                                    }
+                                                @endphp
                                                 <td class="text-center font-weight-bold" colspan="{{ $colspan }}">
-                                                    {{ $course_code.$course_type }} <br>
-                                                    {{ $course_name }} <br>
-                                                    {{ $room }} <br>
-                                                    {{ $faculty_details }} <br>
+                                                    @if($current_routine)
+                                                        {{ $course_code.$course_type }} <br>
+                                                        {{ $course_name }} <br>
+                                                        {{ $room }} <br>
+                                                        {{ $faculty_details }} <br>
+                                                    @endif
                                                 </td>
                                             @endif
 

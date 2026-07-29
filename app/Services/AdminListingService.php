@@ -38,13 +38,18 @@ class AdminListingService
 
         // Search
         if ($search && ! empty($searchable)) {
-            $query->where(function (Builder $q) use ($search, $searchable) {
+            $model = $query->getModel();
+            $query->where(function (Builder $q) use ($search, $searchable, $model) {
                 foreach ($searchable as $field) {
                     if (strpos($field, '.') !== false) {
                         [$relation, $col] = explode('.', $field);
-                        $q->orWhereHas($relation, function ($relQuery) use ($col, $search) {
-                            $relQuery->where($col, 'like', "%{$search}%");
-                        });
+                        if (method_exists($model, $relation)) {
+                            $q->orWhereHas($relation, function ($relQuery) use ($col, $search) {
+                                $relQuery->where($col, 'like', "%{$search}%");
+                            });
+                        } else {
+                            $q->orWhere($field, 'like', "%{$search}%");
+                        }
                     } else {
                         $q->orWhere($field, 'like', "%{$search}%");
                     }
@@ -69,12 +74,12 @@ class AdminListingService
             }
         }
 
-        // Sort (Basic sorting, bypass if sorting on related columns to avoid complex joins for now)
-        if (strpos($sortField, '.') === false) {
-            $query->orderBy($sortField, $sortDir);
+        // Sort (Qualify id column with table name to avoid SQL ambiguity on joins; order by alias directly otherwise)
+        $table = $query->getModel()->getTable();
+        if ($sortField === 'id') {
+            $query->orderBy($table . '.id', $sortDir);
         } else {
-            // Default to ID order if sortField contains relationship to avoid query errors
-            $query->orderBy('id', $sortDir);
+            $query->orderBy($sortField, $sortDir);
         }
 
         $items = $query->paginate($perPage)->appends($this->request->query());

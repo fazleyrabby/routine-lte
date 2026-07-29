@@ -27,7 +27,15 @@ class Student extends Model
 
     public function scopeWithBatchDetails($query)
     {
-        return $query->select('students.*', 'sections.id as section_id', 'batch.id as batch_id')
+        return $query->select(
+            'students.*',
+            'sections.id as section_id',
+            'sections.section_name',
+            'batch.id as batch_id',
+            'batch.batch_no',
+            'shifts.slug',
+            'departments.department_name'
+        )
             ->leftJoin('section_students', 'section_students.student_id', '=', 'students.id')
             ->leftJoin('sections', 'sections.id', '=', 'section_students.section_id')
             ->leftJoin('batch', 'students.batch_id', '=', 'batch.id')

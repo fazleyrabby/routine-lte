@@ -102,10 +102,12 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
     Route::post('day_wise_slot_destroy/{id}', [DayWiseSlotController::class, 'destroy'])->name('day_wise_slot_destroy')->middleware('auth_admin');
 
     Route::get('full_routine/{yearly_session}', [FullRoutineController::class, 'index'])->name('full_routine');
+    Route::get('full_routine/{yearly_session}/edit/{batch_id}/{section_id}', [FullRoutineController::class, 'batchEditor'])->name('routine_batch_editor');
     Route::post('routine_create', [FullRoutineController::class, 'create'])->name('routine_create');
     Route::post('course_check', [FullRoutineController::class, 'course_check'])->name('course_check');
     Route::post('routine_reset', [FullRoutineController::class, 'reset'])->name('routine_reset')->middleware('auth_admin');
     Route::post('routine_cell_delete', [FullRoutineController::class, 'routine_cell_delete'])->name('routine_cell_delete')->middleware('auth_admin');
+    Route::post('full_routine_print', [FullRoutineController::class, 'full_routine_print'])->name('full_routine_print');
     Route::post('class_slot_update', [FullRoutineController::class, 'class_slot_update'])->name('class_slot_update');
     Route::post('teacher_wise_view', [FullRoutineController::class, 'teacher_wise_view'])->name('teacher_wise_view');
     Route::get('routine_list/{session}', [FullRoutineController::class, 'routine_list'])->name('routine_list');

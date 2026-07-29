@@ -13,6 +13,8 @@ use App\Models\YearlySession;
 use App\Models\Shift;
 use App\Models\FullRoutine as Routine;
 use App\Models\StudentsLog;
+use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 
 class StudentController extends MasterController
 {
@@ -49,7 +51,7 @@ class StudentController extends MasterController
         return view('admin.student.create', compact('batches', 'sections', 'sessions'));
     }
 
-    public function store(Request $request)
+    public function store(StoreStudentRequest $request)
     {
         $existStudentId = Student::where('batch_id', $request->batch_id)->pluck('id')->first();
 
@@ -105,17 +107,8 @@ class StudentController extends MasterController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(UpdateStudentRequest $request, Student $student)
     {
-        $this->validate($request, [
-            'number_of_student' => 'required',
-            'batch_id' => 'required|unique:students,batch_id,' . $student->id
-        ],
-            [
-                'number_of_student.required' => 'Enter Section',
-                'batch_id.unique' => 'Data already exist for this batch',
-            ]);
-
         $student->number_of_student = $request->number_of_student;
         $student->batch_id = $request->batch_id;
         $student->yearly_session_id = $request->yearly_session_id;

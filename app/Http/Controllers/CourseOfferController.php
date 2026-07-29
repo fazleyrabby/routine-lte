@@ -22,7 +22,7 @@ class CourseOfferController extends Controller
             'course_offers.id as course_offer_id',
             'course_offers.is_active',
             'batch.batch_no',
-            'batch.slug',
+            'shifts.slug',
             'departments.department_name',
             'sessions.session_name',
             'yearly_sessions.year',
@@ -38,7 +38,7 @@ class CourseOfferController extends Controller
 
         $result = $listing->process(
             $query,
-            ['batch.batch_name', 'departments.department_name', 'sessions.session_name'],
+            ['batch.batch_no', 'departments.department_name', 'sessions.session_name', 'courses.course_name', 'courses.course_code'],
             [],
             'course_offer_id',
             'desc'
