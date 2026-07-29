@@ -70,6 +70,13 @@ class RoutineData2026Seeder extends Seeder
             ]);
         }
 
+        if (DB::table('shift_sessions')->count() == 0) {
+            DB::table('shift_sessions')->insert([
+                ['id' => 11, 'session_id' => 4, 'shift_id' => 1, 'day_id' => null, 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 18, 'session_id' => 4, 'shift_id' => 2, 'day_id' => null, 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
         // ─── 0b. ADMIN USER ──────────────────────────────────────────────────────
         $adminExists = DB::table('users')->where('username', 'superadmin')->exists();
         if (!$adminExists) {
@@ -414,10 +421,17 @@ class RoutineData2026Seeder extends Seeder
         }
         DB::table('routine')->insert($entries);
 
+        $activeSessionRecord = DB::table('yearly_sessions')
+            ->join('sessions', 'sessions.id', '=', 'yearly_sessions.session_id')
+            ->where('yearly_sessions.id', $activeSession)
+            ->select('sessions.session_name', 'yearly_sessions.year')
+            ->first();
+        $sessionStr = $activeSessionRecord ? "{$activeSessionRecord->session_name} {$activeSessionRecord->year} (ID: {$activeSession})" : $activeSession;
+
         // ─── SUMMARY ─────────────────────────────────────────────────────────────
         $this->command->info('');
         $this->command->info('✅  RoutineData2026Seeder complete');
-        $this->command->info("    Active session : {$activeSession}");
+        $this->command->info("    Active session : {$sessionStr}");
         $this->command->info("    Departments    : SWE (id:{$deptSwe}), DS (id:{$deptDs})");
         $this->command->info("    Batches        : SWE-40-D ({$sweBatch1}), SWE-41-M ({$sweBatch2}), DS-38-D ({$dsBatch1}), DS-39-M ({$dsBatch2})");
         $this->command->info("    Courses        : SWE [{$sweCoursesStr}]  DS [{$dsCoursesStr}]");
