@@ -106,6 +106,12 @@ class RoutineData2026Seeder extends Seeder
             ?? DB::table('shifts')->insertGetId(['shift_name' => 'Morning', 'slug' => 'M', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()]);
 
         // ─── 3. ACTIVE SESSION ───────────────────────────────────────────────────
+        if (DB::table('yearly_sessions')->count() == 0) {
+            DB::table('yearly_sessions')->insert([
+                ['id' => 10, 'session_id' => 4, 'year' => 2026, 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+        
         $activeSession = DB::table('yearly_sessions')
             ->where('is_active', 'yes')
             ->orderByDesc('id')
