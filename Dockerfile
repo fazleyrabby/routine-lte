@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libicu-dev \
     zip \
     unzip \
     nginx \
@@ -16,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
 RUN pecl install redis && docker-php-ext-enable redis
 
@@ -39,7 +40,7 @@ RUN mkdir -p /var/www/html/storage/app/public \
     /var/www/html/bootstrap/cache \
     && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
 
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=ext-intl
 
 RUN mkdir -p /var/www/html/storage/logs \
     /var/www/html/storage/framework/cache/data \
