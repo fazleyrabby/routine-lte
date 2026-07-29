@@ -28,6 +28,18 @@ class RoutineData2026Seeder extends Seeder
         DB::table('users')->whereNotIn('role', ['admin', 'superadmin'])->delete();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
+        // ─── 0b. ADMIN USER ──────────────────────────────────────────────────────
+        $adminExists = DB::table('users')->where('username', 'superadmin')->exists();
+        if (!$adminExists) {
+            DB::table('users')->insert([
+                'firstname' => 'Mr.Showmitra', 'lastname' => 'Das',
+                'username'  => 'superadmin',
+                'password'  => Hash::make('123456'),
+                'role'      => 'admin', 'email' => 'superadmin@gmail.com',
+                'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now(),
+            ]);
+        }
+
         // ─── 1. DEPARTMENTS ──────────────────────────────────────────────────────
         $deptSwe = DB::table('departments')->insertGetId([
             'department_name' => 'SWE', 'is_active' => 'yes',
