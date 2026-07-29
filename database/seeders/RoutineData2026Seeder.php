@@ -84,8 +84,9 @@ class RoutineData2026Seeder extends Seeder
                 'firstname' => 'Mr.Showmitra', 'lastname' => 'Das',
                 'username'  => 'superadmin',
                 'password'  => Hash::make('123456'),
-                'role'      => 'admin', 'email' => 'superadmin@gmail.com',
-                'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now(),
+                'role'       => 'admin', 'email' => 'superadmin@gmail.com',
+                'is_active'  => 'yes', 'is_teacher' => 'no',
+                'created_at' => now(), 'updated_at' => now(),
             ]);
         }
 
