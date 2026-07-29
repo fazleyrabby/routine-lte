@@ -21,14 +21,16 @@ class StudentController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $students = Student::with(['batch', 'batch.shift', 'batch.department', 'section_student', 'yearly_session', 'yearly_session.session', 'section_student.section'])->get();
+        $result = $listing->process(
+            Student::query()->with(['batch', 'batch.shift', 'batch.department', 'section_student', 'yearly_session', 'yearly_session.session', 'section_student.section']),
+            ['name', 'roll_no', 'reg_no', 'email', 'phone']
+        );
 
         $shifts = Shift::all();
 
-
-        return view('admin.student.index', compact('students', 'shifts'));
+        return view('admin.student.index', $result + ['students' => $result['items'], 'shifts' => $shifts]);
     }
 
     /**

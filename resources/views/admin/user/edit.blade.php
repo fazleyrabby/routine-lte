@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 User - Update
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-primary float-right">Back</a>
+                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-primary float-end">Back</a>
                             </div>
                             {!! Form::open(['route' => ['users.update', $user->id], 'method'=>'put','enctype'=> 'multipart/form-data'])!!}
 

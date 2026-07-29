@@ -12,10 +12,15 @@ class ShiftController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $shifts = Shift::orderBy('id', 'DESC')->get();
-        return view('admin.shift.index', compact('shifts'));
+        $result = $listing->process(
+            Shift::query(),
+            ['shift_name', 'slug'],
+            ['is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.shift.index', $result + ['shifts' => $result['items']]);
     }
 
     /**

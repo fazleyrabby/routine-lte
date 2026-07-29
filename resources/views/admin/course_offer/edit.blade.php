@@ -23,18 +23,18 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Course offers assign
-                                {{--                                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-primary float-right">Course List</a>--}}
+                                {{--                                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-primary float-end">Course List</a>--}}
                             </div>
                             @if (Session::has('success'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('success') }}
                                 </div>
                             @endif
                             @if (Session::has('error'))
                                 <div class="alert-dismissable alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('error') }}
                                 </div>

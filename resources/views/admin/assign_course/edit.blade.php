@@ -22,14 +22,14 @@
                         <div class="card-body">
                             @if (Session::has('error'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('error') }}
                                 </div>
                             @endif
                             <div class="mt-0 header-title mb-4">
                                 Assign Course
-                                <a href="{{ route('assign_courses.index') }}" class="btn btn-sm btn-primary float-right">Assigned Course List</a>
+                                <a href="{{ route('assign_courses.index') }}" class="btn btn-sm btn-primary float-end">Assigned Course List</a>
                             </div>
 
                           {!! Form::open(['route' =>['assign_courses.update', $assign_course->id], 'method'=>'put'])!!}

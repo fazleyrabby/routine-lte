@@ -13,13 +13,18 @@ class SectionController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $sections = Section::select(['sections.*', 'sub.section_name as sub'])
-            ->leftJoin('sections as sub', 'sub.id', '=', 'sections.parent')
-            ->get();
+        $query = Section::select(['sections.*', 'sub.section_name as sub'])
+            ->leftJoin('sections as sub', 'sub.id', '=', 'sections.parent');
 
-        return view('admin.section.index', compact('sections'));
+        $result = $listing->process(
+            $query,
+            ['sections.section_name'],
+            ['sections.is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.section.index', $result + ['sections' => $result['items']]);
     }
 
     /**

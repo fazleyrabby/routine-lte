@@ -13,10 +13,15 @@ class RoomController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $rooms = Room::orderBy('id', 'DESC')->get();
-        return view('admin.room.index', compact('rooms'));
+        $result = $listing->process(
+            Room::query(),
+            ['room_no', 'building'],
+            ['is_active' => ['yes', 'no'], 'room_type' => ['0', '1']]
+        );
+
+        return view('admin.room.index', $result + ['rooms' => $result['items']]);
     }
 
     /**

@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Time Slot - Update
-                                <a href="{{ route('time_slots.index') }}" class="btn btn-sm btn-primary float-right">Time Slot List</a>
+                                <a href="{{ route('time_slots.index') }}" class="btn btn-sm btn-primary float-end">Time Slot List</a>
                             </div>
                             {!! Form::open(['route' =>['time_slots.update', $time_slot->id], 'method'=>'put','enctype'=> 'multipart/form-data']) !!}
 

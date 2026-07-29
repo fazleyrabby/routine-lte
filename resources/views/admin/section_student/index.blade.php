@@ -19,18 +19,18 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Section wise student number - List
-                                <a href="{{ route('section_students.create') }}" class="btn btn-sm btn-primary float-right">Assign New</a>
+                                <a href="{{ route('section_students.create') }}" class="btn btn-sm btn-primary float-end">Assign New</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>

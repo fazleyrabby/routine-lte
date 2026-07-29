@@ -14,10 +14,17 @@ class TimeSlotController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $time_slots = TimeSlot::with('shift')->orderBy('from','asc')->get();
-        return view('admin.time_slot.index',compact('time_slots'));
+        $result = $listing->process(
+            TimeSlot::query()->with('shift'),
+            ['from', 'to'],
+            ['is_active' => ['yes', 'no']],
+            'from',
+            'asc'
+        );
+
+        return view('admin.time_slot.index', $result + ['time_slots' => $result['items']]);
     }
 
     /**

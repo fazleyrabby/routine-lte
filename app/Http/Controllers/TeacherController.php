@@ -20,10 +20,14 @@ class TeacherController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $teachers = Teacher::with(['department','rank','user','teachers_offday.day'])->get();
-        return view('admin.teacher.index', compact('teachers'));
+        $result = $listing->process(
+            Teacher::query()->with(['department','rank','user','teachers_offday.day']),
+            ['slug', 'user.firstname', 'user.lastname', 'user.email']
+        );
+
+        return view('admin.teacher.index', $result + ['teachers' => $result['items']]);
     }
 
     /**

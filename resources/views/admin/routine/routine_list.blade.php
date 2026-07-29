@@ -44,14 +44,14 @@
                                         <td>{{ $teacher->department->department_name }}</td>
                                         <td>{{ $teacher->rank->rank }}</td>
                                         <td>
-                                            <form class="float-left m-r-5" action="{{ route('teacher_wise_view') }}" method="post">
+                                            <form class="float-start m-r-5" action="{{ route('teacher_wise_view') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="y_session_id" value="{{ $session->id }}">
                                                 <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
                                                 <button type="submit" class="btn btn-sm btn-danger">View</button>
                                             </form>
 
-                                            <form class="float-left m-r-5" action="{{ route('teacher_wise_print') }}" method="post">
+                                            <form class="float-start m-r-5" action="{{ route('teacher_wise_print') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="y_session_id" value="{{ $session->id }}">
                                                 <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
@@ -89,14 +89,14 @@
                                         <td>{{ $batch->department_name."-".$batch->batch_no."-".$batch->slug }}{{ $batch->section_name != '' ? " - ".$batch->section_name : '' }}</td>
 
                                         <td>
-                                            <form class="float-left m-r-5" action="{{ route('batch_wise_view') }}" method="post">
+                                            <form class="float-start m-r-5" action="{{ route('batch_wise_view') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="batch_id" value="{{ $batch->batch_id.",".$batch->section_id }}">
                                                 <input type="hidden" name="y_session_id" value="{{ $session->id }}">
                                                 <button type="submit" class="btn btn-sm btn-danger">View</button>
                                             </form>
 
-                                            <form class="float-left m-r-5" action="{{ route('routine_print') }}" method="post">
+                                            <form class="float-start m-r-5" action="{{ route('routine_print') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="batch_id" value="{{ $batch->batch_id.",".$batch->section_id }}">
                                                 <input type="hidden" name="y_session_id" value="{{ $session->id }}">

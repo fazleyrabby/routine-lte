@@ -22,7 +22,7 @@
                                 <strong>{{ $teacher_detail->user->firstname." ".$teacher_detail->user->lastname }}</strong>
                             </div>
 
-                            <a class="btn btn-danger float-right" href="{{ route('teacher_search') }}">Back</a>
+                            <a class="btn btn-danger float-end" href="{{ route('teacher_search') }}">Back</a>
 
                             <form action="{{ route('teacher_wise_print') }}" method="post">
                                 @csrf
@@ -39,14 +39,14 @@
 
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>
@@ -203,7 +203,7 @@
                     success: function (data) {
                         if (data.type == 'error') {
                             alertBox.innerHTML = `<div class="alert-dismissable alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button><strong>${data.text}</strong></div>`;
                         } else {
                             alert(data.text);

@@ -15,10 +15,14 @@ class DayWiseSlotController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $days = Day::with(['day_wise_slot','day_wise_slot.time_slot'])->get();
-        return view('admin.day_wise_slot.index', compact('days'));
+        $result = $listing->process(
+            Day::query()->with(['day_wise_slot','day_wise_slot.time_slot']),
+            ['day_name']
+        );
+
+        return view('admin.day_wise_slot.index', $result + ['days' => $result['items']]);
     }
 
     /**

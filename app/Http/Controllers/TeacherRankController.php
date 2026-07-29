@@ -14,10 +14,15 @@ class TeacherRankController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $ranks = TeacherRank::orderBy('id', 'DESC')->get();
-        return view('admin.rank.index', compact('ranks'));
+        $result = $listing->process(
+            TeacherRank::query(),
+            ['rank'],
+            ['is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.rank.index', $result + ['ranks' => $result['items']]);
     }
 
     /**

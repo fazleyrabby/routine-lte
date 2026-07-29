@@ -13,10 +13,15 @@ class DepartmentController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $departments = Department::orderBy('id', 'DESC')->get();
-        return view('admin.department.index', compact('departments'));
+        $result = $listing->process(
+            Department::query(),
+            ['department_name', 'short_name'],
+            ['is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.department.index', $result + ['departments' => $result['items']]);
     }
 
     /**

@@ -19,18 +19,18 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Shift Session - List
-                                <a href="{{ route('shift_sessions.create') }}" class="btn btn-sm btn-primary float-right">Add New</a>
+                                <a href="{{ route('shift_sessions.create') }}" class="btn btn-sm btn-primary float-end">Add New</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>
@@ -65,7 +65,7 @@
                                             <a href="{{ route('shift_sessions.edit', $shift_session->id) }}"
                                                class="btn btn-sm btn-primary">Edit</a>
 
-                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target=".bs-example-modal-center{{$shift_session->id}}">Delete</button>
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$shift_session->id}}">Delete</button>
                                         </td>
                                     </tr>
                                     <div class="modal fade bs-example-modal-center{{$shift_session->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -78,7 +78,7 @@
                                                     {!! Form::open(['route' => ['shift_sessions.destroy', $shift_session->id ], 'method' => 'delete', 'style' => 'display:inline']) !!}
                                                     {!! Form::submit('Yes', ['class' => 'btn btn-lg btn-danger']) !!}
                                                     {!! Form::close() !!}
-                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-center{{$shift_session->id}}"> No </button>
+                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$shift_session->id}}"> No </button>
                                                 </div>
                                             </div>
                                         </div>

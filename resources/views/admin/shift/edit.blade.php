@@ -19,7 +19,7 @@
                             <div class="card-body">
                                 <div class="mt-0 header-title mb-4">
                                     Shift - Edit
-                                    <a href="{{ route('shifts.index') }}" class="btn btn-sm btn-primary float-right">Shift List</a>
+                                    <a href="{{ route('shifts.index') }}" class="btn btn-sm btn-primary float-end">Shift List</a>
                                 </div>
                                 {!! Form::open(['route' => ['shifts.update', $shift->id], 'method'=>'put'])!!}
 

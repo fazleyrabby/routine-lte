@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: routine-lte-app
+    restart: unless-stopped
+    command: sh -c "chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache && ln -sf /var/www/html/storage/app/public /var/www/html/public/storage && exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.routine-lte.rule=Host(`routine.fazleyrabbi.xyz`)"
+      - "traefik.http.routers.routine-lte.entrypoints=web"
+      - "traefik.http.services.routine-lte.loadbalancer.server.port=80"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_HOST: mysql-shared
+      DB_PORT: "3306"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    depends_on:
+      redis:
+        condition: service_started
+    networks:
+      - traefik
+      - routine-lte
+      - mysql-shared
+
+  redis:
+    image: redis:7-alpine
+    container_name: routine-lte-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    networks:
+      - routine-lte
+
+volumes:
+  redis_data:
+
+networks:
+  traefik:
+    external: true
+  routine-lte:
+    driver: bridge
+  mysql-shared:
+    external: true

@@ -22,14 +22,14 @@
                         <div class="card-body">
                             @if (Session::has('error'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('error') }}
                                 </div>
                             @endif
                             <div class="mt-0 header-title mb-4">
                                 Time Slot - Create
-                                <a href="{{ route('time_slots.index') }}" class="btn btn-sm btn-primary float-right">Time Slot list</a>
+                                <a href="{{ route('time_slots.index') }}" class="btn btn-sm btn-primary float-end">Time Slot list</a>
                             </div>
                             {!! Form::open(['route' =>'time_slots.store']) !!}
 

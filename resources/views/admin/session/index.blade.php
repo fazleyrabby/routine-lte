@@ -3,10 +3,6 @@
 @section('title', 'Session')
 
 @section('stylesheets')
-    <!-- DataTables -->
-    <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -19,27 +15,29 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Session - List
-                                <a href="{{ route('sessions.create') }}" class="btn btn-sm btn-primary float-right">Add New</a>
+                                <a href="{{ route('sessions.create') }}" class="btn btn-sm btn-primary float-end">Add New</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>
                             @endif
 
 
-                            <table id="datatable-buttons"
-                                   class="table table-striped table-bordered dt-responsive nowrap"
-                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <x-admin.listing-toolbar :search="$search" :perPage="$perPage" :filters="[['field' => 'is_active', 'label' => 'Status', 'options' => ['yes' => 'Active', 'no' => 'Inactive']]]" :appliedFilters="$appliedFilters" />
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered dt-responsive nowrap"
+                                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -63,7 +61,7 @@
                                             <a href="{{ route('sessions.edit', $session->id) }}"
                                                class="btn btn-sm btn-primary">Edit</a>
 
-                                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target=".bs-example-modal-center{{$session->id}}">Delete</button>
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$session->id}}">Delete</button>
                                         </td>
                                     </tr>
                                     <div class="modal fade bs-example-modal-center{{$session->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -76,7 +74,7 @@
                                                     {!! Form::open(['route' => ['sessions.destroy', $session->id ], 'method' => 'delete', 'style' => 'display:inline']) !!}
                                                     {!! Form::submit('Yes', ['class' => 'btn btn-lg btn-danger']) !!}
                                                     {!! Form::close() !!}
-                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-center{{$session->id}}"> No </button>
+                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$session->id}}"> No </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,6 +82,10 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $sessions->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,39 +102,4 @@
 @endsection
 
 
-@push('script')
-    <!-- Datatable init js -->
 
-    <!-- Required datatable js -->
-    <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
-    <script src="../"></script>
-    <!-- Buttons examples -->
-
-
-    <script>
-        $(document).ready(function () {
-            $('#datatable').DataTable();
-
-            //Buttons examples
-            var table = $('#datatable-buttons').DataTable({
-                lengthChange: false,
-                buttons: ['copy', 'excel', 'pdf', 'print',]
-            });
-
-            table.buttons().container()
-                .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-        });
-    </script>
-
-
-@endpush

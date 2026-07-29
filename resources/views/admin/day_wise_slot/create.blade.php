@@ -22,14 +22,14 @@
                         <div class="card-body">
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             <div class="mt-0 header-title mb-4">
                                 Assign Time Slots & Class Slot for <strong>{{ $day->day_title }}</strong>
-                                <a href="{{ route('day_wise_slots') }}" class="btn btn-sm btn-primary float-right">Daywise Slot list</a>
+                                <a href="{{ route('day_wise_slots') }}" class="btn btn-sm btn-primary float-end">Daywise Slot list</a>
                             </div>
                             {!! Form::open(['route' =>'day_wise_slot_store']) !!}
                             <div class="row">

@@ -21,7 +21,7 @@
                             <div class="card-body">
                                 <div class="mt-0 header-title mb-4">
                                     Course - Create
-                                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-primary float-right">Course List</a>
+                                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-primary float-end">Course List</a>
                                 </div>
                                 {!! Form::open(['route' =>'courses.store'])!!}
 

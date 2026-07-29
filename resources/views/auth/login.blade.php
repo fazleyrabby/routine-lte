@@ -1,149 +1,83 @@
 @section('title', 'Login')
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title> @yield('title') </title>
-        <meta content="Admin Dashboard" name="description" />
-          <!-- Google Font: Source Sans Pro -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <!-- Font Awesome Icons -->
-        <link rel="stylesheet" href="{{asset ('backend/plugins/fontawesome-free/css/all.min.css') }}">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="{{asset ('backend/dist/css/adminlte.min.css') }}">
-        @yield('stylesheets')
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@yield('title')</title>
+    <link href="{{ asset('backend/tabler/css/tabler.css') }}" rel="stylesheet" />
+    <link href="{{ asset('backend/tabler/css/tabler-themes.css') }}" rel="stylesheet" />
+    <style>
+        @import url("https://rsms.me/inter/inter.css");
+        body {
+            background: linear-gradient(rgba(0, 0, 0, .50), rgba(0, 0, 0, .50)), url('https://images.pexels.com/photos/3473569/pexels-photo-3473569.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
 <body>
-
-<style>
-     body {
-        background: linear-gradient(rgba(0, 0, 0, .50),rgba(0, 0, 0, .50) ), url( 'https://images.pexels.com/photos/3473569/pexels-photo-3473569.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-</style>
-<div class="container">
-    <h4 class="text-center mt-4 text-light">Routine Management System</h4>
-    <div class="row justify-content-center">
-        <div class="col-md-8 pt-4">
-            <div class="card">
-                <div class="card-header">
-                    Login
-                    <a href="{{ route('home') }}" class="btn btn-sm btn-primary float-right">Home</a>
-                </div>
-
+    <script src="{{ asset('backend/tabler/js/tabler-theme.min.js') }}"></script>
+    <div class="page page-center">
+        <div class="container container-tight py-4">
+            <div class="text-center mb-4">
+                <h2 class="navbar-brand navbar-brand-autodark">Routine Management System</h2>
+            </div>
+            <div class="card card-md">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <h2 class="h2 text-center mb-4">Login</h2>
+                    <form method="POST" action="{{ route('login') }}" autocomplete="off">
                         @csrf
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail / Username') }}</label>
-                            <div class="col-md-6">
-                                <input id="email" type="text" class="form-control
-                                @if ($errors->has('username') || $errors->has('email'))
-                                    is-invalid
-                                @endif " name="login" value="{{ old('username') ? old('email') : 'superadmin' }}" required autocomplete="login" autofocus>
-
-                                @if ($errors->has('username') || $errors->has('email'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('E-Mail / Username') }}</label>
+                            <input type="text" class="form-control @if ($errors->has('username') || $errors->has('email')) is-invalid @endif" name="login" value="{{ old('username') ? old('email') : 'superadmin' }}" autocomplete="login" autofocus>
+                            @if ($errors->has('username') || $errors->has('email'))
+                                <div class="invalid-feedback">{{ $errors->first('username') ?: $errors->first('email') }}</div>
+                            @endif
                         </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" value="123456">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('Password') }}</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="123456" autocomplete="current-password">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                <span class="form-check-label">{{ __('Remember Me') }}</span>
+                            </label>
                         </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">{{ __('Login') }}</button>
                         </div>
                     </form>
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    Credentials
-                </div>
-
+            <div class="card card-md">
+                <div class="card-header"><h3 class="card-title">Credentials</h3></div>
                 <div class="card-body">
-                   <div class="row">
-                       <div class="col-md-6">
-                           <p>Admin</p>
-                           <table class="table table-bordered">
-                            <tbody>
-                              <tr>
-                                <td>Username</td>
-                                <td>superadmin</td>
-                              </tr>
-                              <tr>
-                                <td>Password</td>
-                                <td>123456</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                       </div>
-                       <div class="col-md-6">
-                            <p>Teacher/User</p>
+                    <div class="row">
+                        <div class="col-6">
+                            <p><strong>Admin</strong></p>
                             <table class="table table-bordered">
-                                <tbody>
-                                  <tr>
-                                    <td>Username</td>
-                                    <td>maqsudur_rahman</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Password</td>
-                                    <td>123456</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                       </div>
-                   </div>
+                                <tr><td>Username</td><td>superadmin</td></tr>
+                                <tr><td>Password</td><td>123456</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Teacher/User</strong></p>
+                            <table class="table table-bordered">
+                                <tr><td>Username</td><td>maqsudur_rahman</td></tr>
+                                <tr><td>Password</td><td>123456</td></tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
-
-
+    <script src="{{ asset('backend/tabler/js/tabler.min.js') }}" defer></script>
 </body>
 </html>
-
-

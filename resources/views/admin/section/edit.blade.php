@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Section - Update
-                                <a href="{{ route('sections.index') }}" class="btn btn-sm btn-primary float-right">Section List</a>
+                                <a href="{{ route('sections.index') }}" class="btn btn-sm btn-primary float-end">Section List</a>
                             </div>
                             {!! Form::open(['route' => ['sections.update', $section->id], "method"=>"put" ])!!}
 

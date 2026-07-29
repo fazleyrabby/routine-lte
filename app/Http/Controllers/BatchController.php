@@ -15,10 +15,15 @@ class BatchController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $batches = Batch::orderBy('id', 'DESC')->get();
-        return view('admin.batch.index', compact('batches'));
+        $result = $listing->process(
+            Batch::query()->with(['department', 'shift']),
+            ['batch_name', 'batch_no'],
+            ['is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.batch.index', $result + ['batches' => $result['items']]);
     }
 
     /**

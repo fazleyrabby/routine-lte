@@ -16,11 +16,15 @@ class YearlySessionController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $yearly_sessions = YearlySession::with('session')->get();
+        $result = $listing->process(
+            YearlySession::query()->with('session'),
+            ['year'],
+            ['is_active' => ['yes', 'no']]
+        );
 
-        return view('admin.yearly_session.index', compact('yearly_sessions'));
+        return view('admin.yearly_session.index', $result + ['yearly_sessions' => $result['items']]);
     }
 
     public function status(Request $request)

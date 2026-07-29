@@ -18,19 +18,25 @@ class AssignCourseController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $assign_courses = AssignCourse::select("*","assign_courses_to_teachers.id as assign_courses_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
+        $query = AssignCourse::select("*","assign_courses_to_teachers.id as assign_courses_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
             ->leftJoin('yearly_sessions','yearly_sessions.id','assign_courses_to_teachers.session_id')
             ->leftJoin('teachers', 'teachers.id','assign_courses_to_teachers.teacher_id')
             ->leftJoin('users', 'teachers.user_id','users.id')
             ->leftJoin('sessions','sessions.id','yearly_sessions.session_id')
             ->leftjoin('courses',DB::raw("FIND_IN_SET(courses.id, assign_courses_to_teachers.courses)"),">", DB::raw("'0'"))
-            ->groupBy('assign_courses_to_teachers.id')
-            ->get();
+            ->groupBy('assign_courses_to_teachers.id');
 
+        $result = $listing->process(
+            $query,
+            ['users.firstname', 'users.lastname', 'sessions.session_name'],
+            [],
+            'assign_courses_id',
+            'desc'
+        );
 
-        return view('admin.assign_course.index',compact('assign_courses'))->with('i',1);
+        return view('admin.assign_course.index', $result + ['assign_courses' => $result['items']])->with('i', 1);
     }
 
     /**

@@ -18,7 +18,7 @@
                             <div class="card-body">
                                 <div class="mt-0 header-title mb-4">
                                     Shift - Create
-                                    <a href="{{ route('shifts.index') }}" class="btn btn-sm btn-primary float-right">Shift List</a>
+                                    <a href="{{ route('shifts.index') }}" class="btn btn-sm btn-primary float-end">Shift List</a>
                                 </div>
                                 {!! Form::open(['route' =>'shifts.store'])!!}
                                 <div class="form-group row @if($errors->has('shift_name')) has-error @endif">

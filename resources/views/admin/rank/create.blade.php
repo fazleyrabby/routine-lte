@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <div class="mt-0 header-title mb-4">
                             Rank - Create
-                            <a href="{{ route('ranks.index') }}" class="btn btn-sm btn-primary float-right">Rank List</a>
+                            <a href="{{ route('ranks.index') }}" class="btn btn-sm btn-primary float-end">Rank List</a>
                         </div>
                         {!! Form::open(['route' =>'ranks.store'])!!}
 

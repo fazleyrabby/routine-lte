@@ -16,20 +16,26 @@ class CourseOfferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $course_offers = CourseOffer::select("*","course_offers.id as course_offer_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
+        $query = CourseOffer::select("*","course_offers.id as course_offer_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
             ->leftJoin('batch','batch.id','course_offers.batch_id')
             ->leftJoin('yearly_sessions','yearly_sessions.id','course_offers.yearly_session_id')
             ->leftJoin('sessions','sessions.id','yearly_sessions.session_id')
             ->leftJoin('shifts','shifts.id','batch.shift_id')
             ->leftJoin('departments','departments.id','batch.department_id')
             ->leftjoin('courses',DB::raw("FIND_IN_SET(courses.id, course_offers.courses)"),">", DB::raw("'0'"))
-            ->groupBy('course_offers.id')
-            ->get();
+            ->groupBy('course_offers.id');
 
+        $result = $listing->process(
+            $query,
+            ['batch.batch_name', 'departments.department_name', 'sessions.session_name'],
+            [],
+            'course_offer_id',
+            'desc'
+        );
 
-        return view('admin.course_offer.index', compact('course_offers'))->with('i', 1);
+        return view('admin.course_offer.index', $result + ['course_offers' => $result['items']])->with('i', 1);
     }
 
     /**

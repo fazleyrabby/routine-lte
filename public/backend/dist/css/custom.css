@@ -1,6 +1,4 @@
-.container-fluid{
-    width: 90%;
-}
+
 .dropdown-menu li .nav-link{
     color: #222 !important;
 }
@@ -26,3 +24,21 @@
         display: block;
     }
 }
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+}
+
+.form-group {
+    margin-bottom: 1.25rem !important;
+}
+
+.form-group label {
+    margin-bottom: 0.4rem !important;
+    font-weight: 500;
+    display: inline-block;
+}
+
+

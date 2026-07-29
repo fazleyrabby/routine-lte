@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Teacher - Create
-                                <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-primary float-right">Teacher List</a>
+                                <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-primary float-end">Teacher List</a>
                             </div>
                             {!! Form::open(['route' =>'reset_password_with_token'])!!}
                             <div class="row">

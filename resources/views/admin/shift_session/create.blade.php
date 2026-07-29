@@ -21,14 +21,14 @@
                         <div class="card-body">
                             @if (Session::has('error'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('error') }}
                                 </div>
                             @endif
                             <div class="mt-0 header-title mb-4">
                                 Shift Session - Create
-                                <a href="{{ route('shift_sessions.index') }}" class="btn btn-sm btn-primary float-right">Shift Session List</a>
+                                <a href="{{ route('shift_sessions.index') }}" class="btn btn-sm btn-primary float-end">Shift Session List</a>
                             </div>
                             {!! Form::open(['route' =>'shift_sessions.store'])!!}
 

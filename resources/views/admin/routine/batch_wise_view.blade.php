@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Routine View for <strong>{{ $batch->department_name."-".$batch->batch_no."-".$batch->slug }}{{ $batch->section_name != '' ? " - ".$batch->section_name : '' }}</strong>
-                                {{--                                <a href="{{ route('ranks.create') }}" class="btn btn-sm btn-primary float-right">Add New</a>--}}
+                                {{--                                <a href="{{ route('ranks.create') }}" class="btn btn-sm btn-primary float-end">Add New</a>--}}
                             </div>
 
                             <form action="{{ route('routine_print') }}" method="post">
@@ -33,14 +33,14 @@
                             <br>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>

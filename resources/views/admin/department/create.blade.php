@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Department - Create
-                                <a href="{{ route('departments.index') }}" class="btn btn-sm btn-primary float-right">Department List</a>
+                                <a href="{{ route('departments.index') }}" class="btn btn-sm btn-primary float-end">Department List</a>
                             </div>
                             {!! Form::open(['route' =>'departments.store'])!!}
 

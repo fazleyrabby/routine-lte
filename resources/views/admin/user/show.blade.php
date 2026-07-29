@@ -19,24 +19,24 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 {{ ucfirst($user->user->firstname)." ".ucfirst($user->user->lastname) }}
-                                <a href="{{ route('profile_edit', $id) }}" class="btn btn-primary float-right ml-2">Edit</a>
+                                <a href="{{ route('profile_edit', $id) }}" class="btn btn-primary float-end ml-2">Edit</a>
 
                                 @if (Route::has('password.request'))
-                                    <a href="{{ route('password.request') }}" class="btn btn-dark float-right">Password Reset</a>
+                                    <a href="{{ route('password.request') }}" class="btn btn-dark float-end">Password Reset</a>
                                 @endif
 
-                                <a href="{{ route('password_edit') }}" class="btn btn-danger float-right mr-2">Password Edit</a>
+                                <a href="{{ route('password_edit') }}" class="btn btn-danger float-end mr-2">Password Edit</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>

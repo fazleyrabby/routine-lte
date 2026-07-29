@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Session - Create
-                                <a href="{{ route('sessions.index') }}" class="btn btn-sm btn-primary float-right">Session List</a>
+                                <a href="{{ route('sessions.index') }}" class="btn btn-sm btn-primary float-end">Session List</a>
                             </div>
                             {!! Form::open(['route' =>'sessions.store'])!!}
 

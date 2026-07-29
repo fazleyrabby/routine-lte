@@ -24,7 +24,7 @@
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>

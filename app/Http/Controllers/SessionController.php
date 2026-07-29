@@ -13,10 +13,15 @@ class SessionController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $sessions = SS::orderBy('id', 'DESC')->get();
-        return view('admin.session.index', compact('sessions'));
+        $result = $listing->process(
+            SS::query(),
+            ['session_name'],
+            ['is_active' => ['yes', 'no']]
+        );
+
+        return view('admin.session.index', $result + ['sessions' => $result['items']]);
     }
 
     /**

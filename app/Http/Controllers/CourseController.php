@@ -13,10 +13,15 @@ class CourseController extends MasterController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $courses = Course::orderBy('id', 'DESC')->get();
-        return view('admin.course.index', compact('courses'));
+        $result = $listing->process(
+            Course::query(),
+            ['course_name', 'course_code'],
+            ['is_active' => ['yes', 'no'], 'course_type' => ['0', '1']]
+        );
+
+        return view('admin.course.index', $result + ['courses' => $result['items']]);
     }
 
     /**

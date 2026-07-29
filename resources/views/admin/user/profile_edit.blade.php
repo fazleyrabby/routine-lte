@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 User - Update
-                                <a href="{{ route('users.show', $user->user_id) }}" class="btn btn-sm btn-primary float-right">Back</a>
+                                <a href="{{ route('users.show', $user->user_id) }}" class="btn btn-sm btn-primary float-end">Back</a>
                             </div>
 
                             @if(Auth::user()->role == 'superadmin' || Auth::user()->id == $user->user_id)

@@ -21,11 +21,11 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Assign offday for <strong>{{ strtoupper($teacher->user->firstname)." ".strtoupper($teacher->user->lastname) }}</strong>
-                                <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-primary float-right">Teacher List</a>
+                                <a href="{{ route('teachers.index') }}" class="btn btn-sm btn-primary float-end">Teacher List</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>

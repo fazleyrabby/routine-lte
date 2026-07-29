@@ -19,18 +19,18 @@
                         <div class="card-body">
                             <div class="mt-0 header-title mb-4">
                                 Users - List
-                                <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary float-right">Add New</a>
+                                <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary float-end">Add New</a>
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>
@@ -69,7 +69,7 @@
 {{--                                            <a href="{{ route('users.edit', $user->id) }}"--}}
 {{--                                               class="btn btn-sm btn-primary">Edit</a>--}}
 
-{{--                                            <button type="button" class="btn btn-sm btn-{{ $user->is_active == 'yes' ? 'danger' : 'warning' }}" data-toggle="modal" data-target=".bs-example-modal-center{{$user->id}}">{{ $user->is_active == 'yes' ? 'Inactive' : 'Active' }}</button>--}}
+{{--                                            <button type="button" class="btn btn-sm btn-{{ $user->is_active == 'yes' ? 'danger' : 'warning' }}" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$user->id}}">{{ $user->is_active == 'yes' ? 'Inactive' : 'Active' }}</button>--}}
                                         </td>
                                         <td>
                                             @if(!empty($user->receiver->request_status))
@@ -83,7 +83,7 @@
                                         </td>
                                         <td>
                                             @if(Auth::user()->id != $user->id && $user->role == 'user')
-                                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".invite_{{$user->id}}"> Invite </button>
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target=".invite_{{$user->id}}"> Invite </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -98,7 +98,7 @@
                                                     <input type="text" value="{{$user->is_active == 'yes' ? 'no' : 'yes'}}">
                                                     {!! Form::submit('Yes', ['class' => 'btn btn-lg btn-danger']) !!}
                                                     {!! Form::close() !!}
-                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-center{{$user->id}}"> No </button>
+                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{$user->id}}"> No </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,7 +127,7 @@
 {{--                                                    <br>--}}
                                                     {!! Form::submit('Send', ['class' => 'btn btn-lg btn-danger']) !!}
                                                     {!! Form::close() !!}
-                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".invite_{{$user->id}}"> Cancel </button>
+                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".invite_{{$user->id}}"> Cancel </button>
                                                 </div>
                                             </div>
                                         </div>

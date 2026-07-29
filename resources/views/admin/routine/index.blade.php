@@ -48,7 +48,7 @@
                                 Assign Routine
 
                                 @if(Auth::user()->role == 'admin')
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target=".routine_reset_{{$yearly_session}}">Full Routine Reset</button>
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target=".routine_reset_{{$yearly_session}}">Full Routine Reset</button>
 
                                 <div class="modal fade routine_reset_{{$yearly_session}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -61,14 +61,14 @@
                                                 {!! Form::hidden('yearly_session_id', $yearly_session, ['class'=> 'form-control']) !!}
                                                 {!! Form::submit('Yes', ['class' => 'btn btn-lg btn-danger']) !!}
                                                 {!! Form::close() !!}
-                                                <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".routine_reset_{{$yearly_session}}"> No </button>
+                                                <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".routine_reset_{{$yearly_session}}"> No </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 @endif
-                               <div class="float-right font-14">
+                               <div class="float-end font-14">
                                    @if($last_created_by)
                                        <span> Last Data Input by <strong>
                                             {{ ucwords($last_created_by->firstname." ".$last_created_by->lastname) }}
@@ -96,21 +96,21 @@
                             </div>
                             @if (Session::has('message'))
                                 <div class="alert-dismissable alert alert-success">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('message') }}
                                 </div>
                             @endif
                             @if (Session::has('delete-message'))
                                 <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button>
                                     {{ Session('delete-message') }}
                                 </div>
                             @endif
 
                             @foreach($slots as $slot)
-                                <h3 class="text-uppercase bg-dark p-2 text-light float-left">
+                                <h3 class="text-uppercase bg-dark p-2 text-light float-start">
                                     <strong>
                                         {{ $slot->day_title }}
                                     </strong>
@@ -187,7 +187,7 @@
 
                                                                         @if(($request_check && ($request_check->request_status == "active" && $request_check->expired_date >= now())) || Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->in_committee == 'yes')
 
-                                                                        <button style="right: 0;top: 3px" class="position-absolute btn btn-sm btn-dark"  data-toggle="modal" data-target=".data_delete_{{ $routine_id }}">X</button>
+                                                                        <button style="right: 0;top: 3px" class="position-absolute btn btn-sm btn-dark"  data-bs-toggle="modal" data-bs-target=".data_delete_{{ $routine_id }}">X</button>
 
 
                                                                         <div class="modal fade data_delete_{{ $routine_id }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -202,7 +202,7 @@
 
                                                                                     {!! Form::submit('Yes', ['class' => 'btn btn-lg btn-danger']) !!}
 
-                                                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".data_delete_{{ $routine_id }}"> Cancel </button>
+                                                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".data_delete_{{ $routine_id }}"> Cancel </button>
                                                                                     {!! Form::close() !!}
                                                                                 </div>
                                                                             </div>
@@ -219,7 +219,7 @@
 
                                                     @if(($request_check && ($request_check->request_status == "active" && $request_check->expired_date >= now())) || Auth::user()->role == 'superadmin' || Auth::user()->role == 'admin' || Auth::user()->in_committee == 'yes')
                                                         <span class="d-block text-center">
-                                                            <button type="button" class="m-2 btn btn-sm btn-primary data_modal"  data-toggle="modal" data-target=".bs-example-modal-center{{ 'batch'.$section->batch_id.'_section'.$section->section_id.'_day'.$slot->day_title.'_time'.$timeslot->time_slot->id  }}">Assign / Edit</button>
+                                                            <button type="button" class="m-2 btn btn-sm btn-primary data_modal"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{ 'batch'.$section->batch_id.'_section'.$section->section_id.'_day'.$slot->day_title.'_time'.$timeslot->time_slot->id  }}">Assign / Edit</button>
                                                         </span>
                                                     @endif
 
@@ -292,7 +292,7 @@
                                                                     </div>
                                                                     {!! Form::submit('Assign', ['class' => 'btn btn-lg btn-danger']) !!}
                                                                     {!! Form::close() !!}
-                                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-center{{ 'batch'.$section->batch_id.'_section'.$section->section_id.'_day'.$slot->day_title.'_time'.$timeslot->time_slot->id  }}"> Cancel </button>
+                                                                    <button type="button" class="btn btn-lg btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center{{ 'batch'.$section->batch_id.'_section'.$section->section_id.'_day'.$slot->day_title.'_time'.$timeslot->time_slot->id  }}"> Cancel </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -363,7 +363,7 @@
                     success: function(data) {
                         if(data.type == 'error'){
                             // alertBox.innerHTML = `<div class="alert-dismissable alert alert-danger">
-                            //         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                            //         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                             //         </button><strong>${data.text}</strong></div>`;
                             alert(data.text);
                         }else{
@@ -415,7 +415,7 @@
                         if(data){
                             if(data.msg){
                                 course_alert.innerHTML = `<div class="alert-dismissable alert alert-danger">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">x
                                     </button><strong>${data.msg}</strong></div>`;
                                 submitBtn.prop('disabled', true);
                             }else{
