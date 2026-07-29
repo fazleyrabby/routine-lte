@@ -39,7 +39,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - routine-lte
+      - routine
 
 volumes:
   redis_data:
