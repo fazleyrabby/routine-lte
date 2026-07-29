@@ -21,6 +21,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
     volumes:
+      - .:/var/www/html
       - ./storage:/var/www/html/storage
       - ./bootstrap/cache:/var/www/html/bootstrap/cache
     depends_on:
