@@ -37,6 +37,7 @@ jobs:
         run: |
           docker exec routine_app php artisan key:generate --force || true
           docker exec routine_app php artisan migrate --force
+          docker exec routine_app php artisan db:seed --class=RoutineData2026Seeder --force || true
           docker exec routine_app php artisan config:cache
           docker exec routine_app php artisan view:cache
 
