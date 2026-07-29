@@ -28,6 +28,48 @@ class RoutineData2026Seeder extends Seeder
         DB::table('users')->whereNotIn('role', ['admin', 'superadmin'])->delete();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
+        // ─── 0a. ESSENTIAL BASE DATA (Days, Shifts, Sessions, Time Slots) ────────
+        if (DB::table('days')->count() == 0) {
+            DB::table('days')->insert([
+                ['id' => 1, 'day_title' => 'Saturday', 'slug' => 'SAT', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'day_title' => 'Sunday', 'slug' => 'SUN', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'day_title' => 'Monday', 'slug' => 'MON', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 4, 'day_title' => 'Tuesday', 'slug' => 'TUE', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 5, 'day_title' => 'Wednesday', 'slug' => 'WED', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 6, 'day_title' => 'Thursday', 'slug' => 'THU', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 7, 'day_title' => 'Friday', 'slug' => 'FRI', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
+        if (DB::table('shifts')->count() == 0) {
+            DB::table('shifts')->insert([
+                ['id' => 1, 'shift_name' => 'Day', 'slug' => 'D', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'shift_name' => 'Morning', 'slug' => 'M', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'shift_name' => 'Evening', 'slug' => 'E', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
+        if (DB::table('sessions')->count() == 0) {
+            DB::table('sessions')->insert([
+                ['id' => 1, 'session_name' => 'Spring', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'session_name' => 'Summer', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 4, 'session_name' => 'Fall', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
+        if (DB::table('time_slots')->count() == 0) {
+            DB::table('time_slots')->insert([
+                ['id' => 1, 'from' => '09:00:00', 'to' => '10:25:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '1', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'from' => '10:30:00', 'to' => '11:55:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '1', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'from' => '12:00:00', 'to' => '13:25:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '1', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 4, 'from' => '14:00:00', 'to' => '15:25:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '1', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 5, 'from' => '15:30:00', 'to' => '17:00:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '1', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 6, 'from' => '18:30:00', 'to' => '21:30:00', 'shift_id' => 2, 'is_active' => 'yes', 'type' => '2', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 7, 'from' => '09:30:00', 'to' => '12:30:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '2', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 8, 'from' => '15:00:00', 'to' => '18:00:00', 'shift_id' => 1, 'is_active' => 'yes', 'type' => '2', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
         // ─── 0b. ADMIN USER ──────────────────────────────────────────────────────
         $adminExists = DB::table('users')->where('username', 'superadmin')->exists();
         if (!$adminExists) {
