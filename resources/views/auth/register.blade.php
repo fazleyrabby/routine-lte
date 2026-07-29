@@ -22,7 +22,7 @@
     <div class="page page-center">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
-                <h2 class="navbar-brand navbar-brand-autodark">Routine Management System</h2>
+                <h2 class="text-white">Routine Management System</h2>
             </div>
             <div class="card card-md">
                 <div class="card-body">

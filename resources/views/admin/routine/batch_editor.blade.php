@@ -98,8 +98,6 @@
                                             }
 
                                             $colspan = 1;
-                                            $additionalSlotId = null;
-                                            $additionalSlotLabel = '';
                                             if ($currentRoutine) {
                                                 $nextIdx = $idx + 1;
                                                 while(isset($daySlots[$nextIdx])) {
@@ -117,8 +115,6 @@
                                                     if ($nextRoutine) {
                                                         $colspan++;
                                                         $skippedSlots[] = $nextTs->id;
-                                                        $additionalSlotId = $nextTs->time_slot_id;
-                                                        $additionalSlotLabel = date('g:i a', strtotime($nextTs->time_slot->from)).'-'.date('g:i a', strtotime($nextTs->time_slot->to));
                                                         $nextIdx++;
                                                     } else { break; }
                                                 }
@@ -146,9 +142,7 @@
                                                                 data-course-id="{{ $currentRoutine->course_id }}"
                                                                 data-teacher-id="{{ $currentRoutine->teacher_id }}"
                                                                 data-room-id="{{ $currentRoutine->room_id }}"
-                                                                data-additional-slot="{{ $additionalSlotId }}"
-                                                                data-additional-label="{{ $additionalSlotLabel }}"
-                                                                data-bs-toggle="offcanvas" data-bs-target="#assignPanel">
+                                                                 data-bs-toggle="offcanvas" data-bs-target="#assignPanel">
                                                             Edit
                                                         </button>
                                                         <button class="btn btn-xs btn-sm btn-danger py-0 px-1"
@@ -187,9 +181,7 @@
                                                             data-course-id=""
                                                             data-teacher-id=""
                                                             data-room-id=""
-                                                            data-additional-slot=""
-                                                            data-additional-label=""
-                                                            data-bs-toggle="offcanvas" data-bs-target="#assignPanel">
+                                                             data-bs-toggle="offcanvas" data-bs-target="#assignPanel">
                                                         + Assign
                                                     </button>
                                                 @else
@@ -244,13 +236,6 @@
                     @endforeach
                 </select>
             @endif
-        </div>
-
-        <div class="mb-3" id="additionalSlotWrap" style="display:none">
-            <label class="form-label fw-bold">Additional Slot (Lab)</label>
-            <select name="additional_time_slot" id="panel_additional_slot" class="form-control">
-                <option value="">— Select Additional Slot —</option>
-            </select>
         </div>
 
         <div class="mb-3">
@@ -309,9 +294,6 @@ document.querySelectorAll('.assign-btn').forEach(btn => {
         const courseId    = this.dataset.courseId;
         const teacherId   = this.dataset.teacherId;
         const roomId      = this.dataset.roomId;
-        const addSlot     = this.dataset.additionalSlot;
-        const addLabel    = this.dataset.additionalLabel;
-
         // Set context label
         document.getElementById('panelContext').textContent =
             `Day: ${dayNames[dayId] || dayId}  |  Time: ${timeSlotLabels[timeslotId] || timeslotId}`;
@@ -341,41 +323,16 @@ document.querySelectorAll('.assign-btn').forEach(btn => {
         const roomSelect = document.getElementById('panel_room_id');
         if (roomSelect && roomId) roomSelect.value = roomId;
 
-        // Additional slot for lab
-        if (addSlot) {
-            document.getElementById('additionalSlotWrap').style.display = '';
-            const addSelect = document.getElementById('panel_additional_slot');
-            addSelect.innerHTML = `<option value="">— Select Additional Slot —</option>
-                                   <option value="${addSlot}" selected>${addLabel} (Current)</option>`;
-            // Load other available slots asynchronously, preserving the current selection
-            loadAdditionalSlots(addSlot);
-        } else {
-            document.getElementById('additionalSlotWrap').style.display = 'none';
-            document.getElementById('panel_additional_slot').innerHTML = '<option value="">— Select Additional Slot —</option>';
-        }
-
         // Clear alerts
         document.getElementById('panelAlert').classList.add('d-none');
     });
 });
 
-// Course change → filter teachers + show additional slot for lab
+// Course change → filter teachers
 const courseSelect = document.getElementById('panel_course_id');
 if (courseSelect) {
     courseSelect.addEventListener('change', function() {
-        const cid = parseInt(this.value);
-        filterTeachersByCourse(cid);
-
-        // Show additional slot if lab course (type=1)
-        const selectedOption = this.options[this.selectedIndex];
-        const isLab = selectedOption && selectedOption.dataset.type === '1';
-        if (isLab) {
-            document.getElementById('additionalSlotWrap').style.display = '';
-            loadAdditionalSlots();
-        } else {
-            document.getElementById('additionalSlotWrap').style.display = 'none';
-            document.getElementById('panel_additional_slot').innerHTML = '<option value="">— Select Additional Slot —</option>';
-        }
+        filterTeachersByCourse(parseInt(this.value));
     });
 }
 
@@ -407,41 +364,6 @@ function showAllTeachers() {
     if (!teacherSelect) return;
     teacherSelect.innerHTML = '<option value="">— Select Teacher —</option>';
     allTeacherOptions.forEach(opt => { if(opt.value) teacherSelect.appendChild(opt.cloneNode(true)); });
-}
-
-function loadAdditionalSlots(currentVal = null) {
-    const dayId = document.getElementById('panel_day_id').value;
-    const timeslotId = document.getElementById('panel_time_slot_id').value;
-    const routineId = document.getElementById('panel_routine_id').value;
-    const batchId = '{{ $batch_id }}';
-    const sectionId = '{{ $section_id != "0" ? $section_id : "" }}';
-    const courseId = document.getElementById('panel_course_id').value;
-
-    fetch('{{ route("course_check") }}', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-        body: JSON.stringify({ routine_id: routineId, time_slot_id: timeslotId, batch_id: batchId, section_id: sectionId, day_id: dayId, id: courseId })
-    })
-    .then(r => r.json())
-    .then(data => {
-        const addSelect = document.getElementById('panel_additional_slot');
-        addSelect.innerHTML = '<option value="">— Select Additional Slot —</option>';
-        if (data.msg) {
-            document.getElementById('panelAlert').textContent = data.msg;
-            document.getElementById('panelAlert').classList.remove('d-none');
-        } else {
-            document.getElementById('panelAlert').classList.add('d-none');
-            Object.keys(data).forEach(key => {
-                const opt = document.createElement('option');
-                opt.value = data[key].id;
-                opt.textContent = `${data[key].from} – ${data[key].to}`;
-                if (currentVal && data[key].id == currentVal) {
-                    opt.selected = true;
-                }
-                addSelect.appendChild(opt);
-            });
-        }
-    });
 }
 
 // Form submit via AJAX to stay on page

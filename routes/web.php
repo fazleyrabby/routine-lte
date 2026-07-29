@@ -33,8 +33,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect()->route('login');
+})->name('home');
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -48,7 +48,6 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/routine', [HomeController::class, 'routine'])->name('routine');
 Route::post('/routine_view', [HomeController::class, 'routine_view'])->name('routine_view');
 Route::post('/routine_print', [HomeController::class, 'routine_print'])->name('routine_print');

@@ -66,7 +66,7 @@
                                         <td>{{ $teacher->user->firstname." ".$teacher->user->lastname }}</td>
                                         <td>{{ $teacher->slug }}</td>
 
-                                        <td>{{ $teacher->department->department_name }}</td>
+                                        <td>{{ optional($teacher->department)->department_name ?? 'N/A' }}</td>
                                         <td>{{ $teacher->rank->rank }}</td>
                                         <td>{{ $teacher->user->email }}</td>
                                         <td>@foreach($teacher->teachers_offday as $key => $offday)

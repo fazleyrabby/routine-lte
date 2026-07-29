@@ -129,54 +129,103 @@ class RoutineData2026Seeder extends Seeder
         $dsBatch2  = DB::table('batch')->insertGetId(['batch_no' => 39, 'department_id' => $deptDs,  'shift_id' => $shiftMorning, 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()]);
 
         // ─── 8. SECTIONS (A & B per batch) ──────────────────────────────────────
+        $sectionMap = [];
         foreach ([$sweBatch1, $sweBatch2, $dsBatch1, $dsBatch2] as $batchId) {
-            DB::table('sections')->insert([
-                ['section_name' => 'A', 'slug' => 'a', 'type' => 'theory', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
-                ['section_name' => 'B', 'slug' => 'b', 'type' => 'theory', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()],
+            $idA = DB::table('sections')->insertGetId([
+                'section_name' => 'A', 'slug' => 'a', 'type' => 'theory', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()
             ]);
+            $idB = DB::table('sections')->insertGetId([
+                'section_name' => 'B', 'slug' => 'b', 'type' => 'theory', 'is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()
+            ]);
+            $sectionMap[$batchId] = ['A' => $idA, 'B' => $idB];
         }
 
         // ─── 9. STUDENTS + SECTION STUDENTS ─────────────────────────────────────
         foreach ([$sweBatch1, $sweBatch2, $dsBatch1, $dsBatch2] as $batchId) {
-            $studentId = DB::table('students')->insertGetId([
+            $studentIdA = DB::table('students')->insertGetId([
                 'batch_id'          => $batchId,
                 'yearly_session_id' => $activeSession,
                 'number_of_student' => 35,
                 'is_active'         => 'yes',
                 'created_at'        => now(), 'updated_at' => now(),
             ]);
-            // Link to section A of this batch
-            $sectionAId = DB::table('sections')
-                ->where('section_name', 'A')
-                ->orderByDesc('id')
-                ->skip(
-                    // find the right section A for this batch by position
-                    DB::table('batch')->where('id', '<=', $batchId)->count() * 2 - 2
-                )
-                ->value('id');
-            // Simpler: just get the most recently created section A
-            $sectionAId = DB::table('sections')->where('section_name', 'A')->orderByDesc('id')->first()->id ?? null;
-            if ($sectionAId) {
-                DB::table('section_students')->insert([
-                    'student_id'   => $studentId,
-                    'section_id'   => $sectionAId,
-                    'section_type' => 'theory',
-                    'students'     => 35,
-                    'is_active'    => 'yes',
+            DB::table('section_students')->insert([
+                'student_id'   => $studentIdA,
+                'section_id'   => $sectionMap[$batchId]['A'],
+                'section_type' => 'theory',
+                'students'     => 18,
+                'is_active'    => 'yes',
+                'created_at'   => now(), 'updated_at' => now(),
+            ]);
+            $studentIdB = DB::table('students')->insertGetId([
+                'batch_id'          => $batchId,
+                'yearly_session_id' => $activeSession,
+                'number_of_student' => 35,
+                'is_active'         => 'yes',
+                'created_at'        => now(), 'updated_at' => now(),
+            ]);
+            DB::table('section_students')->insert([
+                'student_id'   => $studentIdB,
+                'section_id'   => $sectionMap[$batchId]['B'],
+                'section_type' => 'theory',
+                'students'     => 17,
+                'is_active'    => 'yes',
+                'created_at'   => now(), 'updated_at' => now(),
+            ]);
+        }
+
+        // ─── 8b. ROOMS ─────────────────────────────────────────────────────────
+        $roomsData = [
+            ['building' => 'A', 'room_no' => '101', 'capacity' => 60, 'room_type' => '0'],
+            ['building' => 'A', 'room_no' => '102', 'capacity' => 70, 'room_type' => '0'],
+            ['building' => 'A', 'room_no' => '301', 'capacity' => 50, 'room_type' => '0'],
+            ['building' => 'B', 'room_no' => '203', 'capacity' => 100, 'room_type' => '1'],
+            ['building' => 'C', 'room_no' => '333', 'capacity' => 100, 'room_type' => '1'],
+            ['building' => 'A', 'room_no' => '601', 'capacity' => 65, 'room_type' => '1'],
+        ];
+        $roomIds = [];
+        foreach ($roomsData as $r) {
+            $existing = DB::table('rooms')->where('building', $r['building'])->where('room_no', $r['room_no'])->first();
+            if ($existing) {
+                $roomIds[] = $existing->id;
+            } else {
+                $roomIds[] = DB::table('rooms')->insertGetId($r + ['is_active' => 'yes', 'created_at' => now(), 'updated_at' => now()]);
+            }
+        }
+        [$rTheory1, $rTheory2, $rTheory3, $rLab1, $rLab2, $rLab3] = $roomIds;
+
+        // ─── 10. DAY-WISE SLOTS ──────────────────────────────────────────────────
+        // Sat–Thu: theory slots (1–5) + evening lab (6)
+        $workingDays   = DB::table('days')->where('is_active', 'yes')->where('slug', '!=', 'FRI')->pluck('id');
+        $theorySlotIds = DB::table('time_slots')->where('type', 1)->pluck('id');
+        $eveningLabId  = DB::table('time_slots')->where('type', 2)->where('from', '18:30:00')->value('id');
+
+        foreach ($workingDays as $dayId) {
+            foreach ($theorySlotIds as $slotId) {
+                DB::table('day_wise_slots')->insert([
+                    'day_id'       => $dayId,
+                    'time_slot_id' => $slotId,
+                    'class_slot'   => 1,
+                    'created_at'   => now(), 'updated_at' => now(),
+                ]);
+            }
+            if ($eveningLabId) {
+                DB::table('day_wise_slots')->insert([
+                    'day_id'       => $dayId,
+                    'time_slot_id' => $eveningLabId,
+                    'class_slot'   => 1,
                     'created_at'   => now(), 'updated_at' => now(),
                 ]);
             }
         }
 
-        // ─── 10. DAY-WISE SLOTS (Sat–Thu) ────────────────────────────────────────
-        $workingDays   = DB::table('days')->where('is_active', 'yes')->where('slug', '!=', 'FRI')->pluck('id');
-        $theorySlotIds = DB::table('time_slots')->where('type', 1)->pluck('id');
-        $labSlotIds    = DB::table('time_slots')->where('type', 2)->pluck('id');
-
-        foreach ($workingDays as $dayId) {
-            foreach ($theorySlotIds->merge($labSlotIds) as $slotId) {
+        // Friday: 3-hour lab blocks (7: 09:30-12:30, 8: 15:00-18:00, 6: 18:30-21:30)
+        $fridayId   = DB::table('days')->where('slug', 'FRI')->value('id');
+        $fridayLabIds = DB::table('time_slots')->where('type', 2)->pluck('id');
+        if ($fridayId) {
+            foreach ($fridayLabIds as $slotId) {
                 DB::table('day_wise_slots')->insert([
-                    'day_id'       => $dayId,
+                    'day_id'       => $fridayId,
                     'time_slot_id' => $slotId,
                     'class_slot'   => 1,
                     'created_at'   => now(), 'updated_at' => now(),
@@ -221,6 +270,96 @@ class RoutineData2026Seeder extends Seeder
             ]);
         }
 
+        // ─── 13. ROUTINE DATA ────────────────────────────────────────────────────
+        $sSecA = $sectionMap[$sweBatch1]['A'];
+        $sSecB = $sectionMap[$sweBatch1]['B'];
+        $s2SecA = $sectionMap[$sweBatch2]['A'];
+        $s2SecB = $sectionMap[$sweBatch2]['B'];
+        $dSecA = $sectionMap[$dsBatch1]['A'];
+        $dSecB = $sectionMap[$dsBatch1]['B'];
+        $d2SecA = $sectionMap[$dsBatch2]['A'];
+        $d2SecB = $sectionMap[$dsBatch2]['B'];
+
+        $adminUserId = DB::table('users')->where('role', 'admin')->value('id') ?? 1;
+
+        $routineData = [
+            // ── SWE-40-D (Day) ──────────────────────────────────────────────────
+            // Sat: SWE401 (Alice/ts1), SWE402 (Bob/ts2), SWE403 (Charlie/ts3)
+            ['teacher_id' => $t1, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 1, 'course_id' => $cSwe1, 'room_id' => $rTheory1],
+            ['teacher_id' => $t2, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 2, 'course_id' => $cSwe2, 'room_id' => $rTheory2],
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 3, 'course_id' => $cSwe3, 'room_id' => $rTheory3],
+            // Mon: SWE401 (Alice/ts4), SWE402 (Bob/ts5)
+            ['teacher_id' => $t1, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 3, 'time_slot_id' => 4, 'course_id' => $cSwe1, 'room_id' => $rTheory1],
+            ['teacher_id' => $t2, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 3, 'time_slot_id' => 5, 'course_id' => $cSwe2, 'room_id' => $rTheory2],
+            // Tue: SWE403 (Charlie/ts1)
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch1, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 1, 'course_id' => $cSwe3, 'room_id' => $rTheory3],
+            // Mon ts6: SWE404 Lab sec A
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch1, 'section_id' => $sSecA, 'day_id' => 3, 'time_slot_id' => 6, 'course_id' => $cSwe4, 'room_id' => $rLab1],
+            // Wed ts6: SWE404 Lab sec B
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch1, 'section_id' => $sSecB, 'day_id' => 5, 'time_slot_id' => 6, 'course_id' => $cSwe4, 'room_id' => $rLab1],
+
+            // ── SWE-41-M (Morning) ─────────────────────────────────────────────
+            // Sat: SWE401 (Alice/ts4), SWE402 (Bob/ts5)
+            ['teacher_id' => $t1, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 4, 'course_id' => $cSwe1, 'room_id' => $rTheory1],
+            ['teacher_id' => $t2, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 5, 'course_id' => $cSwe2, 'room_id' => $rTheory2],
+            // Sun: SWE403 (Charlie/ts1)
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 2, 'time_slot_id' => 1, 'course_id' => $cSwe3, 'room_id' => $rTheory3],
+            // Sun ts6: SWE404 Lab
+            ['teacher_id' => $t3, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 2, 'time_slot_id' => 6, 'course_id' => $cSwe4, 'room_id' => $rLab1],
+            // Mon: SWE401 (Alice/ts2)
+            ['teacher_id' => $t1, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 3, 'time_slot_id' => 2, 'course_id' => $cSwe1, 'room_id' => $rTheory1],
+            // Tue: SWE402 (Bob/ts3)
+            ['teacher_id' => $t2, 'batch_id' => $sweBatch2, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 3, 'course_id' => $cSwe2, 'room_id' => $rTheory2],
+
+            // ── DS-38-D (Day) ──────────────────────────────────────────────────
+            // Sat: DS401 (Alice/ts1), DS402 (Bob/ts2)
+            ['teacher_id' => $t1, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 1, 'course_id' => $cDs1, 'room_id' => $rTheory2],
+            ['teacher_id' => $t2, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 2, 'course_id' => $cDs2, 'room_id' => $rTheory3],
+            // Sun: DS403 (Charlie/ts4)
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 2, 'time_slot_id' => 4, 'course_id' => $cDs3, 'room_id' => $rTheory1],
+            // Mon: DS401 (Alice/ts1)
+            ['teacher_id' => $t1, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 3, 'time_slot_id' => 1, 'course_id' => $cDs1, 'room_id' => $rTheory2],
+            // Tue: DS402 (Bob/ts5), DS404 Lab (Charlie/ts6)
+            ['teacher_id' => $t2, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 5, 'course_id' => $cDs2, 'room_id' => $rTheory3],
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 6, 'course_id' => $cDs4, 'room_id' => $rLab2],
+            // Wed: DS403 (Charlie/ts2)
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch1, 'section_id' => null, 'day_id' => 5, 'time_slot_id' => 2, 'course_id' => $cDs3, 'room_id' => $rTheory1],
+
+            // ── DS-39-M (Morning) ─────────────────────────────────────────────
+            // Sat: DS401 (Alice/ts3), DS403 (Charlie/ts5)
+            ['teacher_id' => $t1, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 3, 'course_id' => $cDs1, 'room_id' => $rTheory2],
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 1, 'time_slot_id' => 5, 'course_id' => $cDs3, 'room_id' => $rTheory3],
+            // Sun: DS402 (Bob/ts4)
+            ['teacher_id' => $t2, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 2, 'time_slot_id' => 4, 'course_id' => $cDs2, 'room_id' => $rTheory1],
+            // Mon: DS404 Lab (Charlie/ts6)
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 3, 'time_slot_id' => 6, 'course_id' => $cDs4, 'room_id' => $rLab2],
+            // Tue: DS401 (Alice/ts1), DS402 (Bob/ts2)
+            ['teacher_id' => $t1, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 1, 'course_id' => $cDs1, 'room_id' => $rTheory2],
+            ['teacher_id' => $t2, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 4, 'time_slot_id' => 2, 'course_id' => $cDs2, 'room_id' => $rTheory3],
+            // Wed: DS403 (Charlie/ts3)
+            ['teacher_id' => $t3, 'batch_id' => $dsBatch2, 'section_id' => null, 'day_id' => 5, 'time_slot_id' => 3, 'course_id' => $cDs3, 'room_id' => $rTheory1],
+        ];
+
+        $entries = [];
+        foreach ($routineData as $i => $r) {
+            $entries[] = [
+                'teacher_id'        => $r['teacher_id'],
+                'batch_id'          => $r['batch_id'],
+                'section_id'        => $r['section_id'],
+                'day_id'            => $r['day_id'],
+                'time_slot_id'      => $r['time_slot_id'],
+                'course_id'         => $r['course_id'],
+                'room_id'           => $r['room_id'],
+                'created_by'        => $adminUserId,
+                'edited_by'         => null,
+                'yearly_session_id' => $activeSession,
+                'is_active'         => 'yes',
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ];
+        }
+        DB::table('routine')->insert($entries);
+
         // ─── SUMMARY ─────────────────────────────────────────────────────────────
         $this->command->info('');
         $this->command->info('✅  RoutineData2026Seeder complete');
@@ -230,6 +369,8 @@ class RoutineData2026Seeder extends Seeder
         $this->command->info("    Courses        : SWE [{$sweCoursesStr}]  DS [{$dsCoursesStr}]");
         $this->command->info("    Teachers       : t{$t1}=Dr.Alice, t{$t2}=Dr.Bob, t{$t3}=Mr.Charlie, t{$t4}=Ms.Diana");
         $this->command->info("    Workloads      : t{$t1}→SWE401+DS401 | t{$t2}→SWE402+DS402 | t{$t3}→SWE403+SWE404+DS403+DS404 | t{$t4}→backup");
+        $this->command->info("    Rooms          : {$rTheory1}(A-101), {$rTheory2}(A-102), {$rTheory3}(A-301), {$rLab1}(B-203), {$rLab2}(C-333), {$rLab3}(A-601)");
+        $this->command->info("    Routine entries: " . count($entries));
         $this->command->info('');
     }
 }

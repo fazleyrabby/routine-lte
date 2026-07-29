@@ -41,7 +41,7 @@
                                         <td>{{ $teacher->id }}</td>
                                         <td>{{ $teacher->user->firstname." ".$teacher->user->lastname }}</td>
                                         <td>{{ $teacher->slug }}</td>
-                                        <td>{{ $teacher->department->department_name }}</td>
+                                        <td>{{ optional($teacher->department)->department_name ?? 'N/A' }}</td>
                                         <td>{{ $teacher->rank->rank }}</td>
                                         <td>
                                             <form class="float-start m-r-5" action="{{ route('teacher_wise_view') }}" method="post">

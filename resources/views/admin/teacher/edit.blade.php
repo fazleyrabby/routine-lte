@@ -106,7 +106,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         {!! Form::label('Department') !!}
-                                        {!! Form::select('department_id',$departments, $teacher->department->id ,['class'=> 'form-control']) !!}
+                                        {!! Form::select('department_id',$departments, optional($teacher->department)->id ,['class'=> 'form-control']) !!}
                                     </div>
                                 </div>
 

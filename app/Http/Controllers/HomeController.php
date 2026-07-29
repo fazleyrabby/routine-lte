@@ -6,7 +6,7 @@ use App\Models\Day;
 use App\Models\DayWiseSlot;
 use App\Models\Student;
 use App\Models\YearlySession;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -55,12 +55,14 @@ class HomeController extends Controller
         list($batch_id, $section_id) = explode(',', $batch_id);
 
         $slots = Day::with(['routine' => function ($query) use ($batch_id,$y_session_id,$section_id) {
+            $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')
+                ->where('batch_id', $batch_id)
+                ->where('yearly_session_id', $y_session_id);
             if ($section_id != ''){
-                $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')->where('batch_id', $batch_id)->where('yearly_session_id',$y_session_id)->where('section_id',$section_id);
-            }else{
-                $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')->where('batch_id', $batch_id)->where('yearly_session_id',$y_session_id);
+                $query->where(function ($q) use ($section_id) {
+                    $q->where('section_id', $section_id)->orWhereNull('section_id');
+                });
             }
-
         },'routine.course' => function ($query) {
             $query->select('id','course_name','course_code','course_type');
         },'routine.teacher' => function ($query) {
@@ -101,12 +103,14 @@ class HomeController extends Controller
         list($batch_id, $section_id) = explode(',', $batch_id);
 
         $slots = Day::with(['routine' => function ($query) use ($batch_id,$y_session_id,$section_id) {
+            $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')
+                ->where('batch_id', $batch_id)
+                ->where('yearly_session_id', $y_session_id);
             if ($section_id != ''){
-                $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')->where('batch_id', $batch_id)->where('yearly_session_id',$y_session_id)->where('section_id',$section_id);
-            }else{
-                $query->select('id','teacher_id','batch_id','section_id','room_id','day_id','time_slot_id','course_id','yearly_session_id','room_id')->where('batch_id', $batch_id)->where('yearly_session_id',$y_session_id);
+                $query->where(function ($q) use ($section_id) {
+                    $q->where('section_id', $section_id)->orWhereNull('section_id');
+                });
             }
-
         },'routine.course' => function ($query) {
             $query->select('id','course_name','course_code','course_type');
         },'routine.teacher' => function ($query) {
@@ -135,16 +139,12 @@ class HomeController extends Controller
                 }
             })->first();
 
-
-
         $data = compact('slots','y_session_id','batch','day_wise_slots');
-//        return view('routine_print', $data);
         $section = $batch->section_name != '' ? "_".$batch->section_name : '';
         $pdf_name = $batch->department_name."_".$batch->batch_no."_".$batch->slug.$section;
 
-//        dd($pdf_name);
-
-        $pdf = PDF::loadView('routine_print',$data);
+        $pdf = Pdf::loadView('routine_print',$data);
         return $pdf->download('routine_'.$pdf_name.".pdf");
     }
 }
+

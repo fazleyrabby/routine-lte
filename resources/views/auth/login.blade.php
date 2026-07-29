@@ -22,10 +22,11 @@
     <div class="page page-center">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
-                <h2 class="navbar-brand navbar-brand-autodark">Routine Management System</h2>
+                <h2 class="text-white">Routine Management System</h2>
             </div>
             <div class="card card-md">
                 <div class="card-body">
+                    <a href="{{ route('routine') }}" class="btn btn-outline-info btn-sm mb-3">View Routine &rarr;</a>
                     <h2 class="h2 text-center mb-4">Login</h2>
                     <form method="POST" action="{{ route('login') }}" autocomplete="off">
                         @csrf
@@ -52,32 +53,33 @@
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary w-100">{{ __('Login') }}</button>
                         </div>
+                        <hr class="my-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100 quick-login" data-username="superadmin" data-password="123456">
+                                    Admin
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-dark w-100 quick-login" data-username="alice_rahman" data-password="password">
+                                    User
+                                </button>
+                            </div>
+                        </div>
                     </form>
-                </div>
-            </div>
-            <div class="card card-md">
-                <div class="card-header"><h3 class="card-title">Credentials</h3></div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <p><strong>Admin</strong></p>
-                            <table class="table table-bordered">
-                                <tr><td>Username</td><td>superadmin</td></tr>
-                                <tr><td>Password</td><td>123456</td></tr>
-                            </table>
-                        </div>
-                        <div class="col-6">
-                            <p><strong>Teacher/User</strong></p>
-                            <table class="table table-bordered">
-                                <tr><td>Username</td><td>maqsudur_rahman</td></tr>
-                                <tr><td>Password</td><td>123456</td></tr>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.quick-login').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('input[name="login"]').value = this.dataset.username;
+                document.querySelector('input[name="password"]').value = this.dataset.password;
+                document.querySelector('form').submit();
+            });
+        });
+    </script>
     <script src="{{ asset('backend/tabler/js/tabler.min.js') }}" defer></script>
 </body>
 </html>

@@ -178,10 +178,10 @@ class FreshDataSeeder extends Seeder
         }
 
         // ─── 10. DAY-WISE SLOTS ──────────────────────────────────────────────────
-        // Saturday–Thursday (days 1–6), theory slots 1–5 per day
-        $days = DB::table('days')->where('is_active', 'yes')->whereNotIn('slug', ['FRI'])->pluck('id');
+        // Sat–Thu: theory slots (1–5) + evening lab (6)
+        $days        = DB::table('days')->where('is_active', 'yes')->whereNotIn('slug', ['FRI'])->pluck('id');
         $theorySlots = DB::table('time_slots')->where('type', 1)->pluck('id');
-        $labSlots    = DB::table('time_slots')->where('type', 2)->pluck('id');
+        $eveningLab  = DB::table('time_slots')->where('type', 2)->where('from', '18:30:00')->first();
 
         foreach ($days as $dayId) {
             foreach ($theorySlots as $slotId) {
@@ -192,9 +192,23 @@ class FreshDataSeeder extends Seeder
                     'created_at'   => now(), 'updated_at' => now(),
                 ]);
             }
-            foreach ($labSlots as $slotId) {
+            if ($eveningLab) {
                 DB::table('day_wise_slots')->insert([
                     'day_id'       => $dayId,
+                    'time_slot_id' => $eveningLab->id,
+                    'class_slot'   => 1,
+                    'created_at'   => now(), 'updated_at' => now(),
+                ]);
+            }
+        }
+
+        // Friday: 3-hour lab blocks (7: 09:30-12:30, 8: 15:00-18:00, 6: 18:30-21:30)
+        $fridayId     = DB::table('days')->where('slug', 'FRI')->value('id');
+        $fridayLabIds = DB::table('time_slots')->where('type', 2)->pluck('id');
+        if ($fridayId) {
+            foreach ($fridayLabIds as $slotId) {
+                DB::table('day_wise_slots')->insert([
+                    'day_id'       => $fridayId,
                     'time_slot_id' => $slotId,
                     'class_slot'   => 1,
                     'created_at'   => now(), 'updated_at' => now(),

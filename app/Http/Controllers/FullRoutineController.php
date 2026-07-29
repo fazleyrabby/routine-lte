@@ -15,7 +15,7 @@ use App\Models\Department;
 use App\Models\AssignCourse;
 use App\Models\TeachersOffday;
 use App\Models\YearlySession;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\TimeSlot;
 use Illuminate\Support\Facades\Auth;
@@ -203,10 +203,10 @@ class FullRoutineController extends MasterController
         $y_session_id = YearlySession::where('is_active','yes')->orderBy('id','DESC')->pluck('id')->first();
 
         $teacher_detail = Teacher::with(['user','rank'])->where('is_active','yes')->where('user_id', Auth::user()->id)->first();
-        $teacher_id = $teacher_detail->id;
-        $user_id = $teacher_detail->user_id;
+        $teacher_id = optional($teacher_detail)->id;
+        $user_id = optional($teacher_detail)->user_id;
 
-        $slots = $this->getTeacherRoutineSlots($teacher_id, $y_session_id, $user_id);
+        $slots = $teacher_detail ? $this->getTeacherRoutineSlots($teacher_id, $y_session_id, $user_id) : collect();
 
         $day_wise_slots = DayWiseSlot::with('day','time_slot')->get();
 
@@ -251,7 +251,7 @@ class FullRoutineController extends MasterController
 
         $pdf_name = $teacher_detail->user->firstname."_".$teacher_detail->user->lastname."_".$yearly_session->session->session_name."_".$yearly_session->year;
 
-        $pdf = PDF::loadView('admin.routine.teacher_wise_print',$data);
+        $pdf = Pdf::loadView('admin.routine.teacher_wise_print',$data);
         return $pdf->download('routine_'.$pdf_name.".pdf");
     }
 
@@ -557,7 +557,7 @@ class FullRoutineController extends MasterController
 
         $pdf_name = "Full_Routine_".$yearly_session->session->session_name."_".$yearly_session->year;
 
-        $pdf = PDF::loadView('admin.routine.full_routine_print',$data)->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('admin.routine.full_routine_print',$data)->setPaper('a4', 'landscape');
         return $pdf->download('routine_'.$pdf_name.".pdf");
     }
 }

@@ -78,82 +78,63 @@
                             {{ $slot->day_title }}
                         </td>
                         @php
-                            $skipped_slots = [];
+                            $cols = $day_wise_slots->where('day_id', $slot->id)->values();
                         @endphp
-                        @foreach($day_wise_slots as $index => $timeslot)
+                        @foreach($cols as $index => $timeslot)
+                            @php
+                                $current_routine = null;
+                                foreach($slot->routine as $routine) {
+                                    if($timeslot->day->id == $routine->day_id && $timeslot->time_slot->id == $routine->time_slot_id &&  $routine->yearly_session_id == $y_session_id) {
+                                        $current_routine = $routine;
+                                        break;
+                                    }
+                                }
 
-                            @php $flag = 0 @endphp
-
-                            @if ($slot->id == $timeslot->day_id)
-                                @php $flag = 1 @endphp
-
-                            @else @php $flag = 0 @endphp
-                            @endif
-
-                            @if($flag == 1)
-                                @if(in_array($timeslot->id, $skipped_slots))
-                                    @continue
-                                @endif
-
-                                @php
-                                    $current_routine = null;
-                                    foreach($slot->routine as $routine) {
-                                        if($timeslot->day->id == $routine->day_id && $timeslot->time_slot->id == $routine->time_slot_id &&  $routine->yearly_session_id == $y_session_id) {
-                                            $current_routine = $routine;
+                                $diff = intval((strtotime($timeslot->time_slot->to) - strtotime($timeslot->time_slot->from))/3600);
+                                $colspan = ($diff > 2 && $loop->iteration < 4) ? 2 : 1;
+                                if ($current_routine) {
+                                    $ni = $index + 1;
+                                    while($ni < $cols->count()) {
+                                        $next_timeslot = $cols[$ni];
+                                        $next_routine = null;
+                                        foreach($slot->routine as $r) {
+                                            if($next_timeslot->day->id == $r->day_id && $next_timeslot->time_slot->id == $r->time_slot_id &&  $r->yearly_session_id == $y_session_id) {
+                                                $next_routine = $r;
+                                                break;
+                                            }
+                                        }
+                                        if ($next_routine && 
+                                            $next_routine->course_id == $current_routine->course_id &&
+                                            $next_routine->teacher_id == $current_routine->teacher_id &&
+                                            $next_routine->room_id == $current_routine->room_id &&
+                                            $next_routine->batch_id == $current_routine->batch_id &&
+                                            $next_routine->section_id == $current_routine->section_id &&
+                                            $next_routine->yearly_session_id == $current_routine->yearly_session_id) {
+                                            $colspan++;
+                                            $ni++;
+                                        } else {
                                             break;
                                         }
                                     }
 
-                                    $colspan = 1;
-                                    if ($current_routine) {
-                                        $next_index = $index + 1;
-                                        while(isset($day_wise_slots[$next_index])) {
-                                            $next_timeslot = $day_wise_slots[$next_index];
-                                            if ($next_timeslot->day_id != $slot->id) {
-                                                break;
-                                            }
-                                            $next_routine = null;
-                                            foreach($slot->routine as $r) {
-                                                if($next_timeslot->day->id == $r->day_id && $next_timeslot->time_slot->id == $r->time_slot_id &&  $r->yearly_session_id == $y_session_id) {
-                                                    $next_routine = $r;
-                                                    break;
-                                                }
-                                            }
-                                            if ($next_routine && 
-                                                $next_routine->course_id == $current_routine->course_id &&
-                                                $next_routine->teacher_id == $current_routine->teacher_id &&
-                                                $next_routine->room_id == $current_routine->room_id &&
-                                                $next_routine->batch_id == $current_routine->batch_id &&
-                                                $next_routine->section_id == $current_routine->section_id &&
-                                                $next_routine->yearly_session_id == $current_routine->yearly_session_id) {
-                                                $colspan++;
-                                                $skipped_slots[] = $next_timeslot->id;
-                                                $next_index++;
-                                            } else {
-                                                break;
-                                            }
-                                        }
-
-                                        $section_name = "";
-                                        if($current_routine->section_id) {
-                                            foreach($current_routine->batch->student->section_student as $section_student) {
-                                                if($section_student->section->id == $current_routine->section_id) {
-                                                    $section_name = "-".$section_student->section->section_name;
-                                                }
+                                    $section_name = "";
+                                    if($current_routine->section_id) {
+                                        foreach($current_routine->batch->student->section_student as $section_student) {
+                                            if($section_student->section->id == $current_routine->section_id) {
+                                                $section_name = "-".$section_student->section->section_name;
                                             }
                                         }
                                     }
-                                @endphp
+                                }
+                            @endphp
 
-                                <td colspan="{{ $colspan }}" style="font-weight: bold; text-align: center">
-                                    @if($current_routine)
-                                        {{ $current_routine->course->course_code }}-{{ $current_routine->course->course_type == '0' ? '(T)': '(L)' }} <br>
-                                        {{ $current_routine->room->building.'-'.$current_routine->room->room_no }} <br>
-                                        {{ $current_routine->batch->department->department_name."-".$current_routine->batch->batch_no."-".$current_routine->batch->shift->slug.$section_name }}
-                                    @endif
-                                </td>
-                            @endif
-
+                            <td colspan="{{ $colspan }}" style="font-weight: bold; text-align: center">
+                                @if($current_routine)
+                                    {{ $current_routine->course->course_code }}-{{ $current_routine->course->course_type == '0' ? '(T)': '(L)' }} <br>
+                                    {{ $current_routine->room->building.'-'.$current_routine->room->room_no }} <br>
+                                    {{ $current_routine->batch->department->department_name."-".$current_routine->batch->batch_no."-".$current_routine->batch->shift->slug.$section_name }}
+                                @endif
+                            </td>
                         @endforeach
                     </tr>
                 @endforeach

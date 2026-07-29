@@ -20,14 +20,14 @@
                     <h4 class="text-center mt-4">Class schedule for <strong>{{ $batch->department_name."-".$batch->batch_no."-".$batch->slug }}{{ $batch->section_name != '' ? " - ".$batch->section_name : '' }} ({{ $batch->session_name."-".$batch->year }})</strong></h4>
                     <div class="card">
                         <div class="card-body">
-                            <div class="mb-4">
-                                <a class="btn btn-danger float-end" href="{{ route('routine') }}">Go Back</a>
-                                <form action="{{ route('routine_print') }}" method="post" class="float-end me-2">
+                            <div class="mb-4 pb-2 d-flex justify-content-end gap-2">
+                                <form action="{{ route('routine_print') }}" method="post">
                                     @csrf
                                     <input type="hidden" name="batch_id" value="{{ $batch->batch_id.",".$batch->section_id }}">
                                     <input type="hidden" name="y_session_id" value="{{ $y_session_id }}">
                                     <button type="submit" class="btn btn-primary">Download as PDF</button>
                                 </form>
+                                <a class="btn btn-danger" href="{{ route('routine') }}">Go Back</a>
                             </div>
 
                             <table class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -36,43 +36,63 @@
                                     @php $count = 0; @endphp
                                     @if($slot->slug == 'SAT' || $slot->slug == 'FRI')
                                         <tr>
-                                            <th class="p-0" style="overflow: hidden">
-                                                <span class="px-3 py-2 d-block border-bottom">Day/Time</span>
-                                            </th>
+                                            <th class="p-0 text-center">Day/Time</th>
                                             @php $count = 0; @endphp
                                             @foreach($day_wise_slots as $key => $timeslot)
                                                 @php
+                                                    $flag = ($slot->id == $timeslot->day_id) ? 1 : 0;
+                                                    if ($flag) $count++;
                                                     $diff = intval((strtotime($timeslot->time_slot->to) - strtotime($timeslot->time_slot->from))/3600);
-                                                    $flag = 0; $colspan = '';
-                                                    if ($slot->id == $timeslot->day_id) { $flag = 1; $count++; } else { $flag = 0; }
-                                                    if($diff > 2 && $count < 4) { $colspan = 2; }
+                                                    $colspan = ($diff > 2 && $count < 4) ? 2 : '';
                                                 @endphp
                                                 @if($flag == 1)
-                                                    <th colspan="{{ $colspan }}" class="p-0 text-center" style="overflow: hidden">
+                                                    <th colspan="{{ $colspan ?: '' }}" class="p-0 text-center">
                                                         <span class="px-3 py-2 d-block">{{ date('g:i a', strtotime($timeslot->time_slot->from)).'-'.date('g:i a', strtotime($timeslot->time_slot->to)) }}</span>
                                                     </th>
                                                 @endif
                                             @endforeach
                                         </tr>
                                     @endif
+                                    @php
+                                        $cols = $day_wise_slots->where('day_id', $slot->id)->sortBy('time_slot.from')->values();
+                                    @endphp
                                     <tr>
-                                        <td>{{ $slot->day_title }}</td>
-                                        @foreach($day_wise_slots as $timeslot)
+                                        <td class="fw-bold text-center">{{ $slot->day_title }}</td>
+                                        @foreach($cols as $index => $timeslot)
                                             @php
-                                                $flag = ($slot->id == $timeslot->day_id) ? 1 : 0;
+                                                $routine = null;
+                                                foreach ($slot->routine as $r) {
+                                                    if ($timeslot->day_id == $r->day_id && $timeslot->time_slot_id == $r->time_slot_id && $r->yearly_session_id == $y_session_id) {
+                                                        $routine = $r; break;
+                                                    }
+                                                }
+                                                $diff = intval((strtotime($timeslot->time_slot->to) - strtotime($timeslot->time_slot->from))/3600);
+                                                $colspan = ($diff > 2 && $loop->iteration < 4) ? 2 : 1;
+                                                if ($routine) {
+                                                    $ni = $index + 1;
+                                                    while ($ni < $cols->count()) {
+                                                        $nt = $cols[$ni];
+                                                        $nr = null;
+                                                        foreach ($slot->routine as $r) {
+                                                            if ($nt->day_id == $r->day_id && $nt->time_slot_id == $r->time_slot_id && $r->yearly_session_id == $y_session_id) {
+                                                                $nr = $r; break;
+                                                            }
+                                                        }
+                                                        if ($nr && $nr->course_id == $routine->course_id && $nr->teacher_id == $routine->teacher_id && $nr->room_id == $routine->room_id && $nr->batch_id == $routine->batch_id && $nr->section_id == $routine->section_id && $nr->yearly_session_id == $routine->yearly_session_id) {
+                                                            $colspan++;
+                                                        } else { break; }
+                                                        $ni++;
+                                                    }
+                                                }
                                             @endphp
-                                            @if($flag == 1)
-                                                <td colspan="{{ $colspan }}" class="text-center font-weight-bold">
-                                                    @foreach($slot->routine as $routine)
-                                                        @if($timeslot->day->id == $routine->day_id && $timeslot->time_slot->id == $routine->time_slot_id && $routine->yearly_session_id == $y_session_id)
-                                                            {{ $routine->course->course_code }}-{{ $routine->course->course_type == '0' ? '(T)': '(L)' }} <br>
-                                                            {{ $routine->course->course_name }} <br>
-                                                            {{ $routine->room->building.'-'.$routine->room->room_no }} <br>
-                                                            {{ $routine->teacher->user->firstname." ".$routine->teacher->user->lastname }}
-                                                        @endif
-                                                    @endforeach
-                                                </td>
-                                            @endif
+                                            <td colspan="{{ $colspan }}" class="text-center fw-bold" style="font-size: 12px;">
+                                                @if ($routine)
+                                                    {{ $routine->course->course_code }}-{{ $routine->course->course_type == '0' ? 'T' : 'L' }} <br>
+                                                    {{ $routine->course->course_name }} <br>
+                                                    {{ $routine->room->building.'-'.$routine->room->room_no }} <br>
+                                                    {{ $routine->teacher->user->firstname." ".$routine->teacher->user->lastname }}
+                                                @endif
+                                            </td>
                                         @endforeach
                                     </tr>
                                 @endforeach
