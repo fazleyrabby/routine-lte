@@ -20,7 +20,15 @@ class AssignCourseController extends MasterController
      */
     public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $query = AssignCourse::select("*","assign_courses_to_teachers.id as assign_courses_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
+        $query = AssignCourse::select([
+            'assign_courses_to_teachers.id as assign_courses_id',
+            'assign_courses_to_teachers.is_active',
+            'users.firstname',
+            'users.lastname',
+            'sessions.session_name',
+            'yearly_sessions.year',
+            DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course")
+        ])
             ->leftJoin('yearly_sessions','yearly_sessions.id','assign_courses_to_teachers.session_id')
             ->leftJoin('teachers', 'teachers.id','assign_courses_to_teachers.teacher_id')
             ->leftJoin('users', 'teachers.user_id','users.id')

@@ -18,7 +18,16 @@ class CourseOfferController extends Controller
      */
     public function index(Request $request, \App\Services\AdminListingService $listing)
     {
-        $query = CourseOffer::select("*","course_offers.id as course_offer_id", DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course "))
+        $query = CourseOffer::select([
+            'course_offers.id as course_offer_id',
+            'course_offers.is_active',
+            'batch.batch_no',
+            'batch.slug',
+            'departments.department_name',
+            'sessions.session_name',
+            'yearly_sessions.year',
+            DB::raw("GROUP_CONCAT(courses.course_code,' | ',courses.course_name,' | ', if(courses.course_type='0','Theory','Sessional'), ' | Credit -',courses.credit) as course")
+        ])
             ->leftJoin('batch','batch.id','course_offers.batch_id')
             ->leftJoin('yearly_sessions','yearly_sessions.id','course_offers.yearly_session_id')
             ->leftJoin('sessions','sessions.id','yearly_sessions.session_id')
