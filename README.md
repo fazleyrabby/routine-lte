@@ -2,6 +2,8 @@
 
 Class schedule management system built with **Laravel 13** + **Tabler** admin template.
 
+<img width="907" height="710" alt="CleanShot 2026-08-08 at 00 57 58" src="https://github.com/user-attachments/assets/165e4fd8-cb87-479f-b5e4-925d7e9dbca5" />
+
 ## Features
 
 - Batch-wise routine viewing and PDF export
